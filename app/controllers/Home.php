@@ -19,7 +19,11 @@ class Home extends Controller
          ];
 
 
-        $columns = $db->get_columns('contacts');
+        $columns = $db->findFirst('contacts', [
+            'conditions' => ["lname = ?", "fname = ?"],
+            'bind' => ['Livaja', 'Zeljko']
+         ]);
+
          dnd($columns);
 
         

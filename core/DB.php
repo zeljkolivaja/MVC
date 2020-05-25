@@ -47,6 +47,83 @@ class DB
     }
 
 
+    protected function _read($table, $params = [])
+    {
+        $conditionString = '';
+        $bind = [];
+        $order = '';
+        $limit = '';
+        //conditions
+        if (isset($params['conditions'])) {
+            if (is_array($params['conditions'])) {
+                foreach ($params['conditions'] as $condition) {
+                    $conditionString .= ' ' . $condition . ' AND';
+                }
+                $conditionString = trim($conditionString);
+                $conditionString = rtrim($conditionString, ' AND');
+            } else {
+                $conditionString = $params['conditions'];
+            }
+
+
+            if ($conditionString != '') {
+                $conditionString = ' WHERE ' . $conditionString;
+            }
+        }
+
+        //binding
+
+        if (array_key_exists('bind', $params)) {
+            $bind = $params['bind'];
+        }
+
+         //order
+
+        if (array_key_exists('order', $params)) {
+            $order = ' ORDER BY ' . $params['order'];
+        }
+        //limit
+
+
+        if (array_key_exists('limit', $params)) {
+            $limit = ' LIMIT ' . $params['limit'];
+        }
+
+        $sql = "SELECT * FROM {$table}{$conditionString}{$order}{$limit}";
+
+ 
+        if ($this->query($sql, $bind)) {
+            
+           if ($this->_result && !count($this -> _result )) {
+              return false;
+           }else {
+               return true;
+           }
+
+           return false;
+        }
+    
+    }
+
+    public function find($table, $params = [])
+    {
+       if ($this->_read($table, $params)) {
+          return $this->result();
+       }else {
+           return false;
+       }
+    }
+
+    public function findFirst($table, $params = [])
+    {
+        if ($this->_read($table, $params)) {
+            return $this->first();
+         }else {
+             return false;
+         }
+    }
+
+
     public function insert($table, $fields = [])
     {
         $fieldString = '';
