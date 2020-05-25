@@ -19,7 +19,8 @@ class Home extends Controller
          ];
 
 
-        $contactsQ = $db->delete('contacts', 3);
+        $columns = $db->get_columns('contacts');
+         dnd($columns);
 
         
          $this->view->render('home/index');
