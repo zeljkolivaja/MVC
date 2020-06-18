@@ -32,14 +32,14 @@ class ImageController extends Controller
         $fileTmpName = $_FILES["image"]["tmp_name"];
         $fileExt = explode('.', $fileName);
         $fileActualExt = strtolower(end($fileExt));
-        
+
         $fileNameNew = uniqid('', true) . "." . $fileActualExt;
         $fileDestination = IMAGEDIR . $fileNameNew;
         move_uploaded_file($fileTmpName, $fileDestination);
 
 
 
-        $path = "public/images/ " . $fileNameNew;
+        $path = "public/images/" . $fileNameNew;
 
         $ImageModel = new Image;
         $ImageModel->insert($path, $imageName);
@@ -50,7 +50,24 @@ class ImageController extends Controller
 
     public function delete()
     {
-        # code...
+        if (!SessionController::loggedIn()) {
+            die("Access denied");
+        }
+
+
+        $ImageId = $_POST["imageId"];
+        $imageOwnerId = $_POST["imageOwnerId"];
+        $path = $_POST["path"];
+        $dirPath = WEB_ROOT . str_replace("/","\\" ,$path);
+        
+
+        if ($_SESSION["userid"] == $imageOwnerId) {
+            $imageModel = new Image;
+            $imageModel->delete($ImageId, $dirPath);
+        }
+
+        ROUTER::redirect("image");
+
     }
 
 

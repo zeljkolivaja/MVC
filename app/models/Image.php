@@ -25,7 +25,18 @@ class Image extends Model
 
     public function read()
     {
-        $sql = ("SELECT * FROM user INNER JOIN image ON user.id = image.user_id");
+        $sql = ("SELECT user.id, 
+        user.username, 
+        user.email,
+        user.city,
+        user.street,
+        image.id as imageId, 
+        image.name,
+        image.path, 
+        image.user_id as imageUserId
+        FROM user 
+        INNER JOIN image
+        ON user.id = image.user_id");
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll();
@@ -40,5 +51,17 @@ class Image extends Model
         $count = $stmt->rowCount();
          
         return $count;
+     }
+
+     public function delete($imageId, $path)
+     {
+        $sql = ("DELETE from image WHERE id = :id");
+        $stmt = $this->db->prepare($sql);
+
+        //Bind our variables.
+        $stmt->bindValue(':id', $imageId);
+        $stmt->execute();
+        unlink($path);
+
      }
 }
