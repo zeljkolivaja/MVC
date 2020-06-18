@@ -8,7 +8,6 @@ class AccountController extends Controller
         parent::__construct();
     }
 
-
     public function indexLogin()
     {
         $this->view->render('account/signin');
@@ -26,6 +25,9 @@ class AccountController extends Controller
 
     public function menage()
     {
+        if (!SessionController::loggedIn()) {
+            die("Access denied");
+        }
         $this->view->render('account/menage');
     }
 

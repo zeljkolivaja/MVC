@@ -6,13 +6,19 @@ class ImageController extends Controller
     public function __construct()
     {
         parent::__construct();
+        
+        if (!SessionController::loggedIn()) {
+            die("Access denied");
+        }
+
     }
 
 
     public function index()
     {
-        //POSLATI SVE SLIKE SKUPA SA JOINON SA KORISNICIMA
-
+        //  if (!SessionController::loggedIn()) {
+        //    die("You are not logged in");
+        // }
         $ImageModel = new Image;
         $images = $ImageModel->read();
 
@@ -58,6 +64,7 @@ class ImageController extends Controller
         $ImageId = $_POST["imageId"];
         $imageOwnerId = $_POST["imageOwnerId"];
         $path = $_POST["path"];
+        
         $dirPath = WEB_ROOT . str_replace("/","\\" ,$path);
         
 

@@ -5,11 +5,12 @@
 
  <?php $this->start('body'); ?>
 
+ <div class="text-center"><h1>IMAGE UPLOAD</h1></div>
 
  <form action="<?= PROOT ?>image/insert" method="POST" enctype='multipart/form-data'>
 
    <div class="form-group">
-     <label for="name">Name</label>
+     <label for="name">Image Name</label>
      <input type="text" required class="form-control" name="name" id="name">
    </div>
 
@@ -25,10 +26,11 @@
 
  </form>
 
+ <hr>
 
 
- </form>
-
+<br/>
+<div class="text-center"><h1>IMAGE GALLLERY</h1></div>
  <table class="table">
    <thead class="thead-dark">
      <tr>

@@ -4,13 +4,15 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />  
+
   <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
   <title> <?= $this->_siteTitle; ?></title>
-  <link rel="stylesheet" href="<?= PROOT ?>css/bootstrap.min.css">
-  <link rel="stylesheet" href="<?= PROOT ?>css/custom.css">
-  <script src="<?= PROOT ?>js/jQuery-2.2.2.4.min.js"></script>
-
+  
+  <link rel="stylesheet" type="text/css" href="<?= PROOT ?>css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="<?= PROOT ?>js/bootstrap.min.js"></script>
 
   <?= $this->content('head') ?>
 
@@ -27,9 +29,11 @@
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <a class="navbar-brand" href="#">Gallery App</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+
+      <button class="navbar-toggler"  type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
+
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
           <a class="nav-item nav-link <?php echo $url == "" ? "active" : ""  ?> " href="<?= PROOT ?>">Home <span class="sr-only">(current)</span></a>
@@ -53,6 +57,8 @@
          </div>
       </div>
     </nav>
+
+    
     <div class="container">
 
       <?= $this->content('body'); ?>
