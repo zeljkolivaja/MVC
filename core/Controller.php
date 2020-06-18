@@ -3,7 +3,6 @@
 class Controller extends Application{
 
 
-    protected $_controller, $_action;
     public $view;
 
 
@@ -12,11 +11,19 @@ class Controller extends Application{
     // takodjer vrtimo i construct application klase koju nasljedjujemo te instanciramo view 
 
 
-    public function __construct($controller , $action)
+    public function __construct()
     {
         parent::__construct();
-        $this->_controller = $controller;
-        $this->_action = $action;
         $this->view = new View();
+
+        //if the user session does not exist but there is a remember cookie
+        //check it and if valid log the user in and create new session
+
+        if (empty($_SESSION['userid']) && !empty($_COOKIE['remember'])) {
+
+            $token = new TokenController;
+            $token->regenerate();
+ 
+        }
     }
 }

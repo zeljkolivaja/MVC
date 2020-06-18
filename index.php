@@ -38,3 +38,4 @@ $url = isset($_SERVER['PATH_INFO']) ? explode('/', ltrim($_SERVER['PATH_INFO'], 
  
 //routanje requesta
 Router::route($url);
+ 

@@ -10,24 +10,22 @@ class Router{
     // ako controller nije definiran postavljamo defaultni (u configu imamo definiranu konstantu)
 
     if( isset($url[0]) && $url[0] != '')  {
-        $controller = ucwords($url[0]);
-    }else {
+        $controller = ucwords($url[0] . "Controller");
+     }else {
         $controller = DEFAULT_CONTROLLER;
     }
-    $controller_name = $controller;
-    array_shift($url);
+     array_shift($url);
 
     //kada smo iz querya izvukli controller pomocu metode array_shift izbacujemo ga iz url.a
     // te je sada na poziciji [0] u $url arrayu metoda/akcija koju korisnik zeli izvrsiti
     // izvlacimo je iz $url.a na isti nacin kao i controller
 
     if( isset($url[0]) && $url[0] != '')  {
-        $action = $url[0] . 'Action';
+        $action = $url[0];
     }else {
-        $action = 'indexAction';
+        $action = 'index';
     }
-    $action_name = $action;
-    array_shift($url);
+     array_shift($url);
 
     //nakon sto smo iz $url arraya (nalazi se na index.php) izvukli zeljeni controller i akciju
     //ostaju nam parametri koje je korisnik poslao
@@ -36,8 +34,9 @@ class Router{
     
     
     //instanciramo objekt 
-     $dispatch = new $controller($controller_name, $action);
-    
+    //  $dispatch = new $controller($controller_name, $action);
+     $dispatch = new $controller();
+     
 
     // umjesto da manualno instanciramo objekt i definiramo mu akciju i saljemo parametre npr.
     // $dispatch->$action_name($query_params)
@@ -45,10 +44,26 @@ class Router{
     if ( method_exists($controller, $action) ) {
         call_user_func_array([$dispatch, $action], $query_params);
     }else {
-        die('that method doess not exists in the controller' . $controller_name);
+        die('that method doess not exists in the controller ' . $controller);
     }
 
 
+ }
+
+ public static function redirect($url)
+ {
+    if (headers_sent()) {
+        echo '<script type="text/javascript">';
+        echo 'window.location.href="'.PROOT, $url.'";';
+        echo '</script>';
+        echo '<noscript>';
+        echo '<meta http-equiv="refresh" content="0;url='.$url.'"/>';
+        echo '</noscript>'; 
+    }else{
+
+         header("Location: " . PROOT . $url);
+    }
+      
  }
 
 }

@@ -4,18 +4,21 @@ class View
 {
 
     protected $_head, $_body, $_siteTitle = SITE_TITLE, $_outputBuffer, $_layout = DEFAULT_LAYOUT;
+    public $test = "bla";
 
     public function __construct()
     {
     }
 
-    public function render($viewName)
+    public function render($viewName, $data=[])
     {
 
         // za kompatibilnost u razlicitim sistemima
         $viewArry = explode('/', $viewName);
         $viewString = implode(DS, $viewArry);
-        if (file_exists(ROOT . DS . 'app' . DS . 'views' . DS . $viewString . '.php')) {
+        extract($data);
+
+         if (file_exists(ROOT . DS . 'app' . DS . 'views' . DS . $viewString . '.php')) {
             include(ROOT . DS . 'app' . DS . 'views' . DS . $viewString . '.php');
             include(ROOT . DS . 'app' . DS . 'views' . DS . 'layouts' . DS . $this->_layout . '.php');
         } else {
