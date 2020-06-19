@@ -85,6 +85,20 @@ class AccountController extends Controller
             $this->view->render('home/index');
         }
     }
+    
+    public function delete($id)
+    {
+        //gets the all user images store on hard drive
+         $imageModel = new Image;
+         $imageModel->bulkDeleteImages($id);
+
+         //deletes the user from the DB and deletes all his images 
+         $userModel = new User;
+         $userModel->delete($id);
+         $this->logout();
+       
+
+    }
 
     public function updatePassword()
     {

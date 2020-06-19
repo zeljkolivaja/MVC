@@ -31,6 +31,14 @@ class User extends Model
         return $stmt->execute([$passwordHash, $username]);
     }
 
+    public function delete($id)
+    {
+       $sql = ("DELETE FROM USER WHERE id = :id");
+       $stmt= $this->db->prepare($sql);
+       $stmt->bindValue(':id', $id);
+       $stmt->execute();
+    }
+
 
     public function lastId()
     {

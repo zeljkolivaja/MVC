@@ -23,6 +23,8 @@ class Image extends Model
         return $stmt->execute();
     }
 
+
+
     public function read()
     {
         $sql = ("SELECT user.id, 
@@ -51,6 +53,20 @@ class Image extends Model
         $count = $stmt->rowCount();
          
         return $count;
+     }
+
+     public function bulkDeleteImages($id)
+     {
+        $sql = ("SELECT * from image WHERE user_id = :id");
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':id', $id);
+        $stmt->execute();
+        $images = $stmt->fetchAll();
+        foreach ($images as $image) {
+        $dirPath = WEB_ROOT . str_replace("/","\\" ,$image->path);
+        unlink($dirPath);
+         
+        }
      }
 
      public function delete($imageId, $path)

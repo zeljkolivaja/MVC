@@ -13,7 +13,7 @@
  <button onclick="location.href='<?= PROOT ?>account/indexChangePassword'" type="button" class="btn btn-primary">
  Change your password</button>
 
- <button onclick="location.href='<?= PROOT ?>account/indexChangePassword'" type="button" class="btn btn-danger">
- Delete your account TODO</button>
+ <button onclick="location.href='<?= PROOT ?>account/delete/<?= $_SESSION['userid'] ?>'" type="button" class="btn btn-danger">
+ Delete your account</button>
 
  <?php $this->end(); ?>
