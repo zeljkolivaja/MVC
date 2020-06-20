@@ -33,7 +33,7 @@ class User extends Model
 
     public function delete($id)
     {
-       $sql = ("DELETE FROM USER WHERE id = :id");
+       $sql = ("DELETE FROM user WHERE id = :id");
        $stmt= $this->db->prepare($sql);
        $stmt->bindValue(':id', $id);
        $stmt->execute();

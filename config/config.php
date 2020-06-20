@@ -31,6 +31,7 @@ define('DB_HOST', '127.0.0.1');
 
 //za storati slike
 define('IMAGEDIR', 'C:/xampp/htdocs/MVC2"/public/images/');
+define('IMAGEDIRONLINE', '/public/images/');
 
 define("WEB_ROOT",substr(dirname(__FILE__),0,strlen(dirname(__FILE__))-6));
 
