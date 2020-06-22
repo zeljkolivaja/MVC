@@ -41,6 +41,9 @@ class Token extends Model
     public function regenerate()
     {
 
+        //take the selector and authenticator from cookie, find the token with the selector
+        //try to match the token from the database with the token from the cookie
+        //if they match set the session and make the new token and cookie
         list($selector, $authenticator) = explode(':', $_COOKIE['remember']);
         $sql = "SELECT * FROM token WHERE selector = :selector";
 
@@ -52,9 +55,14 @@ class Token extends Model
 
         if (hash_equals($row[0]['token'], hash('sha256', base64_decode($authenticator)))) {
 
-            //NAPRAVITI READ IZ BAZE PREMA ID.u I POPUNITI SESSION SVIM PODACIMA
-            $_SESSION['userid'] = $row[0]['user_id'];
-            // Then regenerate login token as above
+            //we find the user with the id we get from token, then we fill the session with his data
+            //and create new token
+            $userModel = new User;
+            $user = $userModel->read($row[0]['user_id']);
+
+            $session = SessionController::getInstance();
+            $session->setSession($row[0]['user_id'], $user['username'], $user['email']);
+
             $this->create($row[0]['user_id']);
         }
     }

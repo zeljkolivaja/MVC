@@ -34,13 +34,14 @@ class AccountController extends Controller
     public function login()
     {
 
-        $username = $_POST["username"];
+        $email = $_POST["email"];
         $password = $_POST["password"];
 
         //instantiate the user model, check does the user exist, save it in $user
         $userModel = new User;
-        $user = $userModel->read($username);
-        $validation = $this->validateLogin($username, $password, $user);
+        $user = $userModel->findWithEmail($email);
+
+        $validation = $this->validateLogin($email, $password, $user);
 
 
 
@@ -128,11 +129,11 @@ class AccountController extends Controller
             die("New password doesnt match");
         }
 
-        $username = $_SESSION["username"];
+        $id = $_SESSION["userid"];
 
         $userModel = new User;
 
-        $user = $userModel->read($username);
+        $user = $userModel->read($id);
 
         $validPassword = password_verify($passwordOld, $user['password']);
 
@@ -140,7 +141,7 @@ class AccountController extends Controller
 
             //Hash the password as we do NOT want to store our passwords in plain text.
             $passwordHash = password_hash($passwordNew, PASSWORD_BCRYPT);
-            $result = $userModel->update($passwordHash, $username);
+            $result = $userModel->update($passwordHash, $id);
 
             //If the signup process is successful.
             if ($result) {
@@ -152,14 +153,14 @@ class AccountController extends Controller
         }
     }
 
-    public function validateLogin($username, $password, $user)
+    public function validateLogin($email, $password, $user)
     {
 
-        $username = !empty($_POST['username']) ? trim($_POST['username']) : null;
+        $email = !empty($_POST['email']) ? trim($_POST['email']) : null;
         $password = !empty($_POST['password']) ? trim($_POST['password']) : null;
 
-        if ($username == null) {
-            $message = "You must enter username";
+        if ($email == null) {
+            $message = "You must enter email";
             return $message;
             // die("You must enter username");
         }
@@ -217,8 +218,7 @@ class AccountController extends Controller
             return $message;
         }
 
-        //napraviti provjeru da li vec postoji username ili email 
-
+ 
         $email = $_POST["email"];
         $userModel = new User;
 
@@ -226,8 +226,6 @@ class AccountController extends Controller
             $message = "Email already registered";
             return $message;
         }
-
-
 
         return "validated";
     }

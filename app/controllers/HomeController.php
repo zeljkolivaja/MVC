@@ -5,24 +5,17 @@ class HomeController extends Controller
 
     public function __construct()
     {
+        //we check for the rememberme cookie in the parent controller
         parent::__construct();
 
-        // trenutno cookie provjerava u parent controlleru
-
-        // if (empty($_SESSION['userid']) && !empty($_COOKIE['remember'])) {
-
-        //     $token = new TokenController;
-        //     $token->regenerate();
- 
-        // }
-      
+        
     }
 
 
     public function index()
     {
 
-        // unset($_SESSION['userid']);
+        //  unset($_SESSION['userid']);
 
         // echo $_SESSION["userid"];
         

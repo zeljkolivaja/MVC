@@ -27,11 +27,11 @@ class User extends Model
     }
 
 
-    public function update($passwordHash, $username)
+    public function update($passwordHash, $id)
     {
-        $sql = "UPDATE user SET password=? WHERE username=?";
+        $sql = "UPDATE user SET password=? WHERE id=?";
         $stmt = $this->db->prepare($sql);
-        return $stmt->execute([$passwordHash, $username]);
+        return $stmt->execute([$passwordHash, $id]);
     }
 
     public function delete($id)
@@ -49,22 +49,36 @@ class User extends Model
         return $id;
     }
 
-    public function read($username)
+    public function read($id)
     {
 
- 
-        //Retrieve the user account information for the given username.
-        $sql = "SELECT id, username, email, password FROM user WHERE username = :username";
+        //Retrieve the user account information for the given id.
+        $sql = "SELECT username, email, password FROM user WHERE id = :id";
         $stmt = $this->db->prepare($sql);
 
         //Bind value.
-        $stmt->bindValue(':username', $username);
+        $stmt->bindValue(':id', $id);
 
         //Execute.
         $stmt->execute();
 
         //Fetch row.
          return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function findWithEmail($email)
+    {
+          $sql = "SELECT id, username, password FROM user WHERE email = :email";
+          $stmt = $this->db->prepare($sql);
+  
+          //Bind value.
+          $stmt->bindValue(':email', $email);
+  
+          //Execute.
+          $stmt->execute();
+  
+          //Fetch row.
+           return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     public function checkEmail($email)
