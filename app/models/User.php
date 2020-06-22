@@ -9,15 +9,18 @@ class User extends Model
     }
 
 
-    public function create($username, $email, $passwordHash)
+    public function create($username, $email, $passwordHash, $city, $street)
     {
-        $sql = "INSERT INTO user (username, email, password) VALUES (:username, :email, :password)";
+        $sql = "INSERT INTO user (username, email, password, city, street) VALUES (:username, :email, :password, :city, :street)";
         $stmt = $this->db->prepare($sql);
 
         //Bind our variables.
         $stmt->bindValue(':username', $username);
         $stmt->bindValue(':email', $email);
         $stmt->bindValue(':password', $passwordHash);
+        $stmt->bindValue(':username', $username);
+        $stmt->bindValue(':city', $city);
+        $stmt->bindValue(':street', $street);
 
         //Execute the statement and insert the new account.
         return $stmt->execute();
@@ -80,8 +83,10 @@ class User extends Model
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($row['num'] > 0) {
-            die('That email already exists!');
+             return false;
         }
+
+        return "true";
     }
 
 }

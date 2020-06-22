@@ -41,6 +41,7 @@ class ImageController extends Controller
 
         $fileNameNew = uniqid('', true) . "." . $fileActualExt;
         $fileDestination = IMAGEDIR . $fileNameNew;
+        
         move_uploaded_file($fileTmpName, $fileDestination);
 
 
@@ -65,7 +66,7 @@ class ImageController extends Controller
         $imageOwnerId = $_POST["imageOwnerId"];
         $path = $_POST["path"];
         
-        $dirPath = WEB_ROOT . str_replace("/","\\" ,$path);
+        $dirPath = ROOT . DS . str_replace("/",DS,$path);
         
 
         if ($_SESSION["userid"] == $imageOwnerId) {

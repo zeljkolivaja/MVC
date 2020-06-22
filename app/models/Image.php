@@ -63,7 +63,7 @@ class Image extends Model
         $stmt->execute();
         $images = $stmt->fetchAll();
         foreach ($images as $image) {
-        $dirPath = WEB_ROOT . str_replace("/","\\" ,$image->path);
+        $dirPath = ROOT . DS  . str_replace("/",DS ,$image->path);
         unlink($dirPath);
          
         }

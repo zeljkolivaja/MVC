@@ -12,7 +12,6 @@
  <button type="button" class="btn btn-primary" onclick="setTimeout(ajaxcall, 1000)">Click me</button>
 
 
- 
  <script type="text/javascript">
      function ajaxcall() {
 
@@ -21,7 +20,7 @@
 
          xhr.onload = function() {
              const serverResponse = document.getElementById("serverResponse");
-             serverResponse.innerHTML = "There are currently " + this.responseText + " images in Database";
+             serverResponse.innerHTML = "The number of images currently in the gallery: " + this.responseText;
          };
 
          xhr.send(null);

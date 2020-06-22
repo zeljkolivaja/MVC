@@ -35,15 +35,30 @@
      </div>
 
 
-     <div class="form-group form-check">
-         <input type="checkbox" class="form-check-input" id="exampleCheck1">
-         <label class="form-check-label" for="exampleCheck1">Check me out</label>
+     <div class="form-group">
+         <label for="city">City</label>
+         <input type="text" required class="form-control" name="city"  id="city">
      </div>
+
+
+     <div class="form-group">
+         <label for="street">Street</label>
+         <input type="text" required class="form-control" name="street"  id="street">
+     </div>
+
+ 
 
      <button type="submit" class="btn btn-primary">Submit</button>
 
  </form>
 
+
+ <?php  if($message != ""): ?>
+
+<div class="alert alert-danger" role="alert">
+<?php echo $message; ?>
+</div>
+ <?php endif?>
 
 
  <?php $this->end(); ?>

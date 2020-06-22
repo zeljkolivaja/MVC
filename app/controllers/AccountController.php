@@ -8,14 +8,14 @@ class AccountController extends Controller
         parent::__construct();
     }
 
-    public function indexLogin()
+    public function indexLogin($message = "")
     {
-        $this->view->render('account/signin');
+        $this->view->render('account/signin', ["message" => $message]);
     }
 
-    public function indexRegister()
+    public function indexRegister($message = "")
     {
-        $this->view->render('account/signup');
+        $this->view->render('account/signup', ["message" => $message]);
     }
 
     public function indexChangePassword()
@@ -34,11 +34,21 @@ class AccountController extends Controller
     public function login()
     {
 
-        extract($_POST);
+        $username = $_POST["username"];
+        $password = $_POST["password"];
+
         //instantiate the user model, check does the user exist, save it in $user
         $userModel = new User;
         $user = $userModel->read($username);
-        $this->validateLogin($username, $password, $user);
+        $validation = $this->validateLogin($username, $password, $user);
+
+
+
+        if ($validation !== "validated") {
+
+            $this->indexLogin($validation);
+            exit;
+        }
 
         //If $validateLogin passes we proceed to login the user
         if (empty($_POST["rememberme"])) {
@@ -47,7 +57,6 @@ class AccountController extends Controller
             $session->setSession($user['id'], $user['username'], $user['email']);
             ROUTER::redirect("home/index");
             exit;
-
         } else {
 
             $token = new TokenController;
@@ -62,8 +71,19 @@ class AccountController extends Controller
     public function register()
     {
         // validate the input
-        $this->validateRegistration();
-        extract($_POST);
+        $validation = $this->validateRegistration();
+
+        if ($validation !== "validated") {
+
+            $this->indexRegister($validation);
+            exit;
+        }
+
+        $username = $_POST["username"];
+        $email = $_POST["email"];
+        $password = $_POST["password"];
+        $city = $_POST["city"];
+        $street = $_POST["street"];
 
         //Hash the password as we do NOT want to store our passwords in plain text.
         $passwordHash = password_hash($password, PASSWORD_BCRYPT);
@@ -72,8 +92,8 @@ class AccountController extends Controller
         //Remember: We are inserting a new row into our users table.
 
         $userModel = new User;
- 
-        $result = $userModel->create($username, $email, $passwordHash);
+
+        $result = $userModel->create($username, $email, $passwordHash, $city, $street);
         $id = $userModel->lastId();
 
         $session = SessionController::getInstance();
@@ -85,19 +105,17 @@ class AccountController extends Controller
             $this->view->render('home/index');
         }
     }
-    
+
     public function delete($id)
     {
         //gets the all user images store on hard drive
-         $imageModel = new Image;
-         $imageModel->bulkDeleteImages($id);
+        $imageModel = new Image;
+        $imageModel->bulkDeleteImages($id);
 
-         //deletes the user from the DB and deletes all his images 
-         $userModel = new User;
-         $userModel->delete($id);
-         $this->logout();
-       
-
+        //deletes the user from the DB and deletes all his images 
+        $userModel = new User;
+        $userModel->delete($id);
+        $this->logout();
     }
 
     public function updatePassword()
@@ -113,7 +131,7 @@ class AccountController extends Controller
         $username = $_SESSION["username"];
 
         $userModel = new User;
- 
+
         $user = $userModel->read($username);
 
         $validPassword = password_verify($passwordOld, $user['password']);
@@ -141,20 +159,20 @@ class AccountController extends Controller
         $password = !empty($_POST['password']) ? trim($_POST['password']) : null;
 
         if ($username == null) {
-            die("You must enter username");
+            $message = "You must enter username";
+            return $message;
+            // die("You must enter username");
         }
 
         if ($password == null) {
-            die("You must enter password");
+            $message = "You must enter password";
+            return $message;
         }
 
-        // var_dump($user);
-        // die();
 
         if ($user === false) {
-            //Could not find a user with that username!
-            //PS: You might want to handle this error in a more user-friendly manner!
-            die('Incorrect username!');
+            $message = "Could not find a user with that username!";
+            return $message;
         }
 
         $validPassword = password_verify($password, $user['password']);
@@ -162,44 +180,56 @@ class AccountController extends Controller
 
         if (!$validPassword) {
             //$validPassword was FALSE. Passwords do not match.
-            die('Incorrect username / password combination!');
+            $message = "Password incorrect!";
+            return $message;
         }
 
-        return true;
+        return "validated";
     }
 
     public function validateRegistration()
     {
 
         if ($_POST["username"] === "") {
-            die("You must enter username");
+            $message = "You must enter username";
+            return $message;
         }
 
         if ($_POST["email"] === "") {
-            die("You must enter email");
+            $message = "You must enter email";
+            return $message;
         }
 
         if (!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
-            die("Invalid email format");
+            $message = "Invalid email format";
+            return $message;
         }
 
         if ($_POST["password"] === "") {
-            die("You must enter password");
+            $message = "You must enter password";
+            return $message;
         }
 
+
+
         if ($_POST["password"] != $_POST["password2"]) {
-            die("Your password doesnt match");
+            $message = "Your password doesnt match";
+            return $message;
         }
 
         //napraviti provjeru da li vec postoji username ili email 
 
         $email = $_POST["email"];
         $userModel = new User;
- 
-        $userModel->checkEmail($email);
+
+        if (!$userModel->checkEmail($email)) {
+            $message = "Email already registered";
+            return $message;
+        }
 
 
-        return true;
+
+        return "validated";
     }
 
     public function logout()

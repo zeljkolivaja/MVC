@@ -33,6 +33,13 @@
      <button type="submit" class="btn btn-primary">Submit</button>
 
  </form>
+<br/>
+
+ <?php  if($message != ""): ?>
+<div class="alert alert-danger" role="alert">
+<?php echo $message; ?>
+</div>
+ <?php endif?>
 
 
 
