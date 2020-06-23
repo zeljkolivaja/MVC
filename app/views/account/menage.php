@@ -5,15 +5,22 @@
  <?php $this->start('body'); ?>
 
  <div>
-     <h2>Menage your account</h2>
+     <h2>Hello <?= $_SESSION["username"]; ?>. <br /> Menage your account</h2>
  </div>
  <br>
- 
- 
- <button onclick="location.href='<?= PROOT ?>account/indexChangePassword'" type="button" class="btn btn-primary">
- Change your password</button>
 
- <button onclick="location.href='<?= PROOT ?>account/delete/<?= $_SESSION['userid'] ?>'" type="button" class="btn btn-danger">
- Delete your account</button>
+
+<p> <a href="<?= PROOT ?>account/indexChangePassword" class="btn btn-primary">
+     Change your password
+ </a>
+ </p>
+
+<form action="<?= PROOT?>account/delete/?>" method="POST" 
+ onsubmit="return confirm('Are you sure you want to delete your account?')">
+ <input type="hidden" name="id" value="<?= $_SESSION['userid'] ?>">
+     <button type="submit" class="btn btn-danger">DELETE ACCOUNT</button>
+ </form>
+
+
 
  <?php $this->end(); ?>

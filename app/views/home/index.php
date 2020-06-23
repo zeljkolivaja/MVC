@@ -27,5 +27,4 @@
      }
  </script>
 
- 
  <?php $this->end(); ?>

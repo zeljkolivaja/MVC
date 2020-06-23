@@ -107,9 +107,11 @@ class AccountController extends Controller
         }
     }
 
-    public function delete($id)
+    public function delete()
     {
-        //gets the all user images store on hard drive
+
+        $id = $_POST["id"];
+         //gets the all user images store on hard drive
         $imageModel = new Image;
         $imageModel->bulkDeleteImages($id);
 
@@ -172,7 +174,7 @@ class AccountController extends Controller
 
 
         if ($user === false) {
-            $message = "Could not find a user with that username!";
+            $message = "Could not find a user with that email adress!";
             return $message;
         }
 
