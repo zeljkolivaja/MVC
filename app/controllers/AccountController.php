@@ -8,7 +8,7 @@ class AccountController extends Controller
         parent::__construct();
     }
 
-    public function indexLogin($message = "")
+    public function indexLogin($message = NULL)
     {
         $this->view->render('account/signin', ["message" => $message]);
     }
@@ -18,9 +18,9 @@ class AccountController extends Controller
         $this->view->render('account/signup', ["message" => $message]);
     }
 
-    public function indexChangePassword()
+    public function indexChangePassword($message = NULL)
     {
-        $this->view->render('account/changePassword');
+        $this->view->render('account/changePassword', ["message" => $message]);
     }
 
     public function menage()
@@ -42,8 +42,6 @@ class AccountController extends Controller
         $user = $userModel->findWithEmail($email);
 
         $validation = $this->validateLogin($email, $password, $user);
-
-
 
         if ($validation !== "validated") {
 
@@ -100,9 +98,7 @@ class AccountController extends Controller
         $session = SessionController::getInstance();
         $session->setSession($id, $username, $email);
 
-        //If the signup process is successful.
         if ($result) {
-            //What you do here is up to you!
             $this->view->render('home/index');
         }
     }
@@ -111,7 +107,7 @@ class AccountController extends Controller
     {
 
         $id = $_POST["id"];
-         //gets the all user images store on hard drive
+        //gets the all user images store on hard drive
         $imageModel = new Image;
         $imageModel->bulkDeleteImages($id);
 
@@ -121,25 +117,48 @@ class AccountController extends Controller
         $this->logout();
     }
 
-    public function updatePassword()
+    public function validateUpdatePassword($passwordNew, $passwordNew2, $passwordOld, $realPassword)
     {
-        // validate the input
-        // $this->validateRegistration();
-        extract($_POST);
 
         if ($passwordNew != $passwordNew2) {
-            die("New password doesnt match");
+            $message = "Your new password doesnt match";
+            $this->indexChangePassword($message);
+            exit;
         }
+
+
+        $validPassword = password_verify($passwordOld, $realPassword);
+        if (!$validPassword) {
+            $message = "Your old password is incorrect";
+            $this->indexChangePassword($message);
+            exit;
+        }
+
+        return true;
+    }
+
+    public function updatePassword()
+    {
+        $passwordNew = $_POST["passwordNew"];
+        $passwordNew2 = $_POST["passwordNew2"];
+        $passwordOld = $_POST["passwordOld"];
 
         $id = $_SESSION["userid"];
 
         $userModel = new User;
-
         $user = $userModel->read($id);
+        $realPassword = $user['password'];
 
-        $validPassword = password_verify($passwordOld, $user['password']);
 
-        if ($validPassword) {
+        $validation = $this->validateUpdatePassword(
+            $passwordNew,
+            $passwordNew2,
+            $passwordOld,
+            $realPassword
+        );
+
+
+        if ($validation) {
 
             //Hash the password as we do NOT want to store our passwords in plain text.
             $passwordHash = password_hash($passwordNew, PASSWORD_BCRYPT);
@@ -147,10 +166,8 @@ class AccountController extends Controller
 
             //If the signup process is successful.
             if ($result) {
-                //What you do here is up to you!
-                $this->logout();
-                // $message = "You have successfully changed your password";
-                ROUTER::redirect("home/index");
+                $message = "You have changed your password";
+                $this->logout($message);
             }
         }
     }
@@ -213,14 +230,12 @@ class AccountController extends Controller
             return $message;
         }
 
-
-
         if ($_POST["password"] != $_POST["password2"]) {
             $message = "Your password doesnt match";
             return $message;
         }
 
- 
+
         $email = $_POST["email"];
         $userModel = new User;
 
@@ -232,7 +247,7 @@ class AccountController extends Controller
         return "validated";
     }
 
-    public function logout()
+    public function logout($message = NULL)
     {
 
         $session = SessionController::getInstance();
@@ -245,6 +260,6 @@ class AccountController extends Controller
             '/'
         );
 
-        $this->view->render('home/index');
+        $this->indexLogin($message);
     }
 }

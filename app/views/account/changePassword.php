@@ -17,12 +17,12 @@
      </div>
 
      <div class="form-group">
-         <label for="password">New Password</label>
+         <label for="passwordNew">New Password</label>
          <input type="password" required class="form-control" name="passwordNew" id="exampleInputPassword1">
      </div>
   
      <div class="form-group">
-         <label for="password">Enter New Password Again</label>
+         <label for="passwordNew2">Enter New Password Again</label>
          <input type="password" required class="form-control" name="passwordNew2" id="exampleInputPassword1">
      </div>
 
@@ -31,5 +31,11 @@
  </form>
 
  
+ <?php  if($message != NULL): ?>
+<div class="alert alert-danger" role="alert">
+<?php echo $message; ?>
+</div>
+ <?php endif?>
+
 
  <?php $this->end();?>
