@@ -26,6 +26,13 @@
 
  </form>
 
+ <?php  if($message != ""): ?>
+<div class="alert alert-danger" role="alert">
+<?php echo $message; ?>
+</div>
+ <?php endif?>
+ 
+
  <hr>
 
 

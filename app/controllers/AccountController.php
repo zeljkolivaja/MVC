@@ -2,7 +2,6 @@
 
 class AccountController extends Controller
 {
-
     public function __construct()
     {
         parent::__construct();
@@ -13,13 +12,17 @@ class AccountController extends Controller
         $this->view->render('account/signin', ["message" => $message]);
     }
 
-    public function indexRegister($message = "")
+    public function indexRegister($message = NULL)
     {
         $this->view->render('account/signup', ["message" => $message]);
     }
 
     public function indexChangePassword($message = NULL)
     {
+        if (!SessionController::loggedIn()) {
+            die("Access denied");
+        }
+
         $this->view->render('account/changePassword', ["message" => $message]);
     }
 
@@ -37,7 +40,6 @@ class AccountController extends Controller
         $email = $_POST["email"];
         $password = $_POST["password"];
 
-        //instantiate the user model, check does the user exist, save it in $user
         $userModel = new User;
         $user = $userModel->findWithEmail($email);
 
@@ -67,13 +69,32 @@ class AccountController extends Controller
         }
     }
 
+    public function logout($message = NULL)
+    {
+
+        if (!SessionController::loggedIn()) {
+            die("Access denied");
+        }
+
+        $session = SessionController::getInstance();
+        $session->destroySession();
+
+        setcookie(
+            'remember',
+            '',
+            time() - 42000,
+            '/'
+        );
+
+        $this->indexLogin($message);
+    }
+
     public function register()
     {
         // validate the input
         $validation = $this->validateRegistration();
 
         if ($validation !== "validated") {
-
             $this->indexRegister($validation);
             exit;
         }
@@ -88,10 +109,8 @@ class AccountController extends Controller
         $passwordHash = password_hash($password, PASSWORD_BCRYPT);
 
         //Prepare our INSERT statement.
-        //Remember: We are inserting a new row into our users table.
-
+ 
         $userModel = new User;
-
         $result = $userModel->create($username, $email, $passwordHash, $city, $street);
         $id = $userModel->lastId();
 
@@ -105,6 +124,9 @@ class AccountController extends Controller
 
     public function delete()
     {
+        if (!SessionController::loggedIn()) {
+            die("Access denied");
+        }
 
         $id = $_POST["id"];
         //gets the all user images store on hard drive
@@ -115,26 +137,6 @@ class AccountController extends Controller
         $userModel = new User;
         $userModel->delete($id);
         $this->logout();
-    }
-
-    public function validateUpdatePassword($passwordNew, $passwordNew2, $passwordOld, $realPassword)
-    {
-
-        if ($passwordNew != $passwordNew2) {
-            $message = "Your new password doesnt match";
-            $this->indexChangePassword($message);
-            exit;
-        }
-
-
-        $validPassword = password_verify($passwordOld, $realPassword);
-        if (!$validPassword) {
-            $message = "Your old password is incorrect";
-            $this->indexChangePassword($message);
-            exit;
-        }
-
-        return true;
     }
 
     public function updatePassword()
@@ -247,19 +249,26 @@ class AccountController extends Controller
         return "validated";
     }
 
-    public function logout($message = NULL)
+
+    public function validateUpdatePassword($passwordNew, $passwordNew2, $passwordOld, $realPassword)
     {
 
-        $session = SessionController::getInstance();
-        $session->destroySession();
+        if ($passwordNew != $passwordNew2) {
+            $message = "Your new password doesnt match";
+            $this->indexChangePassword($message);
+            exit;
+        }
 
-        setcookie(
-            'remember',
-            '',
-            time() - 42000,
-            '/'
-        );
 
-        $this->indexLogin($message);
+        $validPassword = password_verify($passwordOld, $realPassword);
+        if (!$validPassword) {
+            $message = "Your old password is incorrect";
+            $this->indexChangePassword($message);
+            exit;
+        }
+
+        return true;
     }
+
+
 }

@@ -14,24 +14,18 @@ class ImageController extends Controller
     }
 
 
-    public function index()
+    public function index($message = NULL)
     {
-        //  if (!SessionController::loggedIn()) {
-        //    die("You are not logged in");
-        // }
         $ImageModel = new Image;
         $images = $ImageModel->read();
 
-        $this->view->render('image/index', ["images" => $images]);
+        $this->view->render('image/index', ["images" => $images, "message" => $message]);
     }
 
 
     public function insert()
     {
-        //validacija
-        // jos image name odvalidirati treba !!!!
         $imageName = $_POST["name"];
-
         $this->imageValidation($_FILES["image"]);
 
         $fileName = $_FILES["image"]["name"];
@@ -41,7 +35,7 @@ class ImageController extends Controller
 
         $fileNameNew = uniqid('', true) . "." . $fileActualExt;
         $fileDestination = IMAGEDIR . $fileNameNew;
-        
+        //store images to hard drive
         move_uploaded_file($fileTmpName, $fileDestination);
 
 
@@ -49,18 +43,17 @@ class ImageController extends Controller
         $path = "public/images/" . $fileNameNew;
 
         $ImageModel = new Image;
+        //insert image into database
         $ImageModel->insert($path, $imageName);
 
-        ROUTER::redirect("home/index");
+        ROUTER::redirect("image/index");
     }
 
 
     public function delete()
     {
-        if (!SessionController::loggedIn()) {
-            die("Access denied");
-        }
 
+        // die("tu sam");
 
         $ImageId = $_POST["imageId"];
         $imageOwnerId = $_POST["imageOwnerId"];
@@ -75,6 +68,7 @@ class ImageController extends Controller
         }
 
         ROUTER::redirect("image");
+      
 
     }
 
@@ -88,21 +82,30 @@ class ImageController extends Controller
 
         $size = getimagesize($fileTmpName);
         if (!$size) {
-            die("file type error");
-        }
+
+            $message = "File type error";
+            $this->index($message);
+            exit;
+         }
 
         $valid_types = array(IMAGETYPE_JPEG, IMAGETYPE_PNG);
 
         if (!in_array($size[2],  $valid_types)) {
-            die("Image must be JPEG or PNG");
+            $message = "Image must be JPEG or PNG";
+            $this->index($message);
+            exit;
         }
 
         if ($fileError != 0) {
-            die("error uploading file");
+            $message = "Error uploading file";
+            $this->index($message);
+            exit;
         }
 
         if ($fileSize > 5097152) {
-            die("file to big");
+            $message = "file to big";
+            $this->index($message);
+            exit;
         }
     }
 }
