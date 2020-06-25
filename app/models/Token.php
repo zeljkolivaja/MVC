@@ -8,7 +8,6 @@ class Token extends Model
         parent::__construct();
     }
 
-
     public function create($userId)
     {
         $selector = base64_encode(random_bytes(9));

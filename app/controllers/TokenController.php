@@ -2,24 +2,21 @@
 
 Class TokenController
 {
+    private $Token;
 
+    public function __construct()
+    {
+        $this->Token = new Token;
+    }
 
     public function create($userId)
-    {
-
-        $tokenModel = new Token;
-        $tokenModel->create($userId);
-        
+    {    
+        $this->Token->create($userId);    
     }
 
     public function regenerate()
     {
-
-        $tokenModel = new Token;
-        $tokenModel->regenerate();
-        
+        $this->Token->regenerate();       
     }
     
-
-
 }

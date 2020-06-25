@@ -2,9 +2,12 @@
 
 class AccountController extends Controller
 {
+    private $user;
+
     public function __construct()
     {
         parent::__construct();
+        $this->user = new User;
     }
 
     public function indexLogin($message = NULL)
@@ -31,6 +34,7 @@ class AccountController extends Controller
         if (!SessionController::loggedIn()) {
             die("Access denied");
         }
+
         $this->view->render('account/menage');
     }
 
@@ -40,8 +44,7 @@ class AccountController extends Controller
         $email = $_POST["email"];
         $password = $_POST["password"];
 
-        $userModel = new User;
-        $user = $userModel->findWithEmail($email);
+        $user = $this->user->findWithEmail($email);
 
         $validation = $this->validateLogin($email, $password, $user);
 
@@ -110,9 +113,9 @@ class AccountController extends Controller
 
         //Prepare our INSERT statement.
  
-        $userModel = new User;
-        $result = $userModel->create($username, $email, $passwordHash, $city, $street);
-        $id = $userModel->lastId();
+    
+        $result = $this->user->create($username, $email, $passwordHash, $city, $street);
+        $id = $this->user->lastId();
 
         $session = SessionController::getInstance();
         $session->setSession($id, $username, $email);
@@ -134,8 +137,7 @@ class AccountController extends Controller
         $imageModel->bulkDeleteImages($id);
 
         //deletes the user from the DB and deletes all his images 
-        $userModel = new User;
-        $userModel->delete($id);
+        $this->user->delete($id);
         $this->logout();
     }
 
@@ -147,8 +149,7 @@ class AccountController extends Controller
 
         $id = $_SESSION["userid"];
 
-        $userModel = new User;
-        $user = $userModel->read($id);
+        $user = $this->user->read($id);
         $realPassword = $user['password'];
 
 
@@ -164,7 +165,7 @@ class AccountController extends Controller
 
             //Hash the password as we do NOT want to store our passwords in plain text.
             $passwordHash = password_hash($passwordNew, PASSWORD_BCRYPT);
-            $result = $userModel->update($passwordHash, $id);
+            $result = $this->user->update($passwordHash, $id);
 
             //If the signup process is successful.
             if ($result) {
@@ -191,14 +192,12 @@ class AccountController extends Controller
             return $message;
         }
 
-
         if ($user === false) {
             $message = "Could not find a user with that email adress!";
             return $message;
         }
 
         $validPassword = password_verify($password, $user['password']);
-
 
         if (!$validPassword) {
             //$validPassword was FALSE. Passwords do not match.
@@ -239,16 +238,15 @@ class AccountController extends Controller
 
 
         $email = $_POST["email"];
-        $userModel = new User;
+        
 
-        if (!$userModel->checkEmail($email)) {
+        if (!$this->user->checkEmail($email)) {
             $message = "Email already registered";
             return $message;
         }
 
         return "validated";
     }
-
 
     public function validateUpdatePassword($passwordNew, $passwordNew2, $passwordOld, $realPassword)
     {
@@ -269,6 +267,4 @@ class AccountController extends Controller
 
         return true;
     }
-
-
 }

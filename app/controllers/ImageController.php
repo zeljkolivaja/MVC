@@ -2,6 +2,7 @@
 
 class ImageController extends Controller
 {
+    private $image;
 
     public function __construct()
     {
@@ -10,18 +11,17 @@ class ImageController extends Controller
         if (!SessionController::loggedIn()) {
             die("Access denied");
         }
+        $this->image = new Image;
 
     }
-
 
     public function index($message = NULL)
     {
-        $ImageModel = new Image;
-        $images = $ImageModel->read();
+      
+        $images = $this->image->read();
 
         $this->view->render('image/index', ["images" => $images, "message" => $message]);
     }
-
 
     public function insert()
     {
@@ -38,13 +38,10 @@ class ImageController extends Controller
         //store images to hard drive
         move_uploaded_file($fileTmpName, $fileDestination);
 
-
-
         $path = "public/images/" . $fileNameNew;
 
-        $ImageModel = new Image;
         //insert image into database
-        $ImageModel->insert($path, $imageName);
+        $this->image->insert($path, $imageName);
 
         ROUTER::redirect("image/index");
     }
@@ -52,24 +49,17 @@ class ImageController extends Controller
 
     public function delete()
     {
-
-        // die("tu sam");
-
         $ImageId = $_POST["imageId"];
         $imageOwnerId = $_POST["imageOwnerId"];
         $path = $_POST["path"];
         
         $dirPath = ROOT . DS . str_replace("/",DS,$path);
-        
-
+    
         if ($_SESSION["userid"] == $imageOwnerId) {
-            $imageModel = new Image;
-            $imageModel->delete($ImageId, $dirPath);
+            $this->image->delete($ImageId, $dirPath);
         }
 
         ROUTER::redirect("image");
-      
-
     }
 
 
@@ -78,8 +68,7 @@ class ImageController extends Controller
         $fileTmpName = $file["tmp_name"];
         $fileSize = $file["size"];
         $fileError = $file["error"];
-
-
+        
         $size = getimagesize($fileTmpName);
         if (!$size) {
 
