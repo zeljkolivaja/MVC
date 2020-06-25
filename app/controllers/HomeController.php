@@ -10,7 +10,6 @@ class HomeController extends Controller
         //we check for the rememberme cookie in the parent controller
         parent::__construct();
         $this->image = new Image;
-
     }
 
     public function index()

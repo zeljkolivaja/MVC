@@ -49,14 +49,12 @@ class AccountController extends Controller
         $validation = $this->validateLogin($email, $password, $user);
 
         if ($validation !== "validated") {
-
             $this->indexLogin($validation);
             exit;
         }
 
         //If $validateLogin passes we proceed to login the user
         if (empty($_POST["rememberme"])) {
-
             $session = SessionController::getInstance();
             $session->setSession($user['id'], $user['username'], $user['email']);
             ROUTER::redirect("home/index");
@@ -113,7 +111,6 @@ class AccountController extends Controller
 
         //Prepare our INSERT statement.
  
-    
         $result = $this->user->create($username, $email, $passwordHash, $city, $street);
         $id = $this->user->lastId();
 
@@ -152,21 +149,13 @@ class AccountController extends Controller
         $user = $this->user->read($id);
         $realPassword = $user['password'];
 
-
-        $validation = $this->validateUpdatePassword(
-            $passwordNew,
-            $passwordNew2,
-            $passwordOld,
-            $realPassword
-        );
-
-
+        $this->checkPasswordMatch($passwordNew,$passwordNew2);
+        $validation = $this->validateUpdatePassword($passwordOld,$realPassword);
+    
         if ($validation) {
-
             //Hash the password as we do NOT want to store our passwords in plain text.
             $passwordHash = password_hash($passwordNew, PASSWORD_BCRYPT);
             $result = $this->user->update($passwordHash, $id);
-
             //If the signup process is successful.
             if ($result) {
                 $message = "You have changed your password";
@@ -248,15 +237,8 @@ class AccountController extends Controller
         return "validated";
     }
 
-    public function validateUpdatePassword($passwordNew, $passwordNew2, $passwordOld, $realPassword)
+    public function validateUpdatePassword($passwordOld, $realPassword)
     {
-
-        if ($passwordNew != $passwordNew2) {
-            $message = "Your new password doesnt match";
-            $this->indexChangePassword($message);
-            exit;
-        }
-
 
         $validPassword = password_verify($passwordOld, $realPassword);
         if (!$validPassword) {
@@ -266,5 +248,14 @@ class AccountController extends Controller
         }
 
         return true;
+    }
+
+    public function checkPasswordMatch($pass1, $pass2)
+    {
+        if ($pass1 != $pass2) {
+            $message = "Your new password doesnt match";
+            $this->indexChangePassword($message);
+            exit;
+        }
     }
 }
