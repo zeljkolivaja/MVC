@@ -18,7 +18,6 @@ class User extends Model
         $stmt->bindValue(':username', $username);
         $stmt->bindValue(':email', $email);
         $stmt->bindValue(':password', $passwordHash);
-        $stmt->bindValue(':username', $username);
         $stmt->bindValue(':city', $city);
         $stmt->bindValue(':street', $street);
 

@@ -19,12 +19,11 @@ class PopulateDatabaseController
             }
         }
 
-        if ($data != NULL) {
 
-            if (!in_array("user", $tables)) {
-                //call sql script to populate db;
+        if (!in_array("user", $tables)) {
+            //call sql script to populate db;
 
-                $sql = "CREATE TABLE `user` (
+            $sql = "CREATE TABLE `user` (
                 `id` int(11) UNSIGNED NOT NULL primary key auto_increment,
                 `username` varchar(255) NOT NULL,
                 `email` varchar(255) NOT NULL,
@@ -32,46 +31,58 @@ class PopulateDatabaseController
                 `city` varchar(50) DEFAULT NULL,
                 `street` varchar(150) DEFAULT NULL
               )";
-                $stmt = $db->prepare($sql);
-                $stmt->execute();
-            }
+            $stmt = $db->prepare($sql);
+            $stmt->execute();
+        }
 
-            if (!in_array("token", $tables)) {
+        if (!in_array("token", $tables)) {
 
-                $sql = "CREATE TABLE `token` (
+            $sql = "CREATE TABLE `token` (
                 `id` int(11) NOT NULL primary key auto_increment,
                 `selector` char(12) NOT NULL,
                 `token` char(64) NOT NULL,
                 `user_id` int(11) UNSIGNED NOT NULL,
                 `expires` datetime NOT NULL
               )";
-                $stmt = $db->prepare($sql);
-                $stmt->execute();
-            }
+            $stmt = $db->prepare($sql);
+            $stmt->execute();
+        }
 
-            if (!in_array("image", $tables)) {
+        if (!in_array("image", $tables)) {
 
-                $sql = "CREATE TABLE `image` (
+            $sql = "CREATE TABLE `image` (
                 `id` int(11) NOT NULL primary key auto_increment,
                 `name` varchar(200) NOT NULL,
                 `path` longtext NOT NULL,
                 `user_id` int(11) UNSIGNED NOT NULL
               )";
-                $stmt = $db->prepare($sql);
-                $stmt->execute();
-            }
-
-            $sql = "ALTER TABLE `image` 
-    ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) 
-    ON DELETE CASCADE";
-            $stmt = $db->prepare($sql);
-            $stmt->execute();
-
-            $sql = "ALTER TABLE `token`
-    ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) 
-    ON DELETE CASCADE";
             $stmt = $db->prepare($sql);
             $stmt->execute();
         }
+
+        $sql = "ALTER TABLE `image` 
+    ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) 
+    ON DELETE CASCADE";
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+
+        $sql = "ALTER TABLE `token`
+    ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) 
+    ON DELETE CASCADE";
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+
+
+        $password = password_hash("test", PASSWORD_BCRYPT);
+
+        $sql = "INSERT INTO user (username, email, password, city, street) VALUES (:username, :email, :password, :city, :street)";
+        $stmt = $db->prepare($sql);
+        $stmt->bindValue(':username', "Test");
+        $stmt->bindValue(':email', "test@gmail.com");
+        $stmt->bindValue(':password', $password);
+        $stmt->bindValue(':city', "Osijek");
+        $stmt->bindValue(':street', "Osjecka 21");
+        return $stmt->execute();
     }
 }
