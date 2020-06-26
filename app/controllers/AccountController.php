@@ -7,7 +7,7 @@ class AccountController extends Controller
     public function __construct()
     {
         parent::__construct();
-        $this->user = new User;
+        $this->user = new User; 
     }
 
     public function indexLogin($message = NULL)

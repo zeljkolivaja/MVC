@@ -26,7 +26,7 @@
     // THINGS TO CHANGE FOR ONLINE OR ON ANOTHER PC
 
     // our database name
-    define('DB_NAME', 'gallery');
+    define('DB_NAME', 'vjezba');
     //database user
     define('DB_USER', 'Zeljko');
     //database password

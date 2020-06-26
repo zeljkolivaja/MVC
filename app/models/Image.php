@@ -46,13 +46,18 @@ class Image extends Model
 
     public function getTotalImages()
     {
+        try {
+
         $sql = "SELECT * FROM image";
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
-
-        $count = $stmt->rowCount();
-         
+        $count = $stmt->rowCount();   
         return $count;
+
+        } catch (\Throwable $th) {
+            return $message = "No images found";
+        }
+        
      }
 
      public function bulkDeleteImages($id)

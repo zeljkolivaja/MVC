@@ -15,8 +15,7 @@ class HomeController extends Controller
     public function index()
     {
         //  unset($_SESSION['userid']);
-        $totalImages = $this->image->getTotalImages();
-        $this->view->render('home/index', ['totalImages' => $totalImages]);
+        $this->view->render('home/index');
     }
 
     public function getTotalImages()
