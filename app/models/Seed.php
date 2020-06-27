@@ -1,16 +1,14 @@
 <?php
-
-class PopulateDatabaseController
+class Seed extends Model
 {
 
     public function read()
     {
-        $db = DB::getInstance();
         $sql = "show Tables";
-        $stmt = $db->prepare($sql);
+        $stmt = $this->db->prepare($sql);
         $stmt->execute();
-
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 
         $tables = [];
         foreach ($data as $index => $array) {
@@ -18,7 +16,11 @@ class PopulateDatabaseController
                 $tables[] = $value;
             }
         }
-
+ 
+        if (in_array("user", $tables) && in_array("token", $tables)
+           && in_array("image", $tables)) {
+            return false;
+        }
 
         if (!in_array("user", $tables)) {
             //call sql script to populate db;
@@ -31,7 +33,18 @@ class PopulateDatabaseController
                 `city` varchar(50) DEFAULT NULL,
                 `street` varchar(150) DEFAULT NULL
               )";
-            $stmt = $db->prepare($sql);
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute();
+
+            $password = password_hash("test", PASSWORD_BCRYPT);
+
+            $sql = "INSERT INTO user (username, email, password, city, street) VALUES (:username, :email, :password, :city, :street)";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':username', "Test");
+            $stmt->bindValue(':email', "test@gmail.com");
+            $stmt->bindValue(':password', $password);
+            $stmt->bindValue(':city', "Osijek");
+            $stmt->bindValue(':street', "Osjecka 21");
             $stmt->execute();
         }
 
@@ -44,7 +57,7 @@ class PopulateDatabaseController
                 `user_id` int(11) UNSIGNED NOT NULL,
                 `expires` datetime NOT NULL
               )";
-            $stmt = $db->prepare($sql);
+            $stmt = $this->db->prepare($sql);
             $stmt->execute();
         }
 
@@ -56,33 +69,27 @@ class PopulateDatabaseController
                 `path` longtext NOT NULL,
                 `user_id` int(11) UNSIGNED NOT NULL
               )";
-            $stmt = $db->prepare($sql);
+            $stmt = $this->db->prepare($sql);
             $stmt->execute();
         }
 
         $sql = "ALTER TABLE `image` 
     ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) 
     ON DELETE CASCADE";
-        $stmt = $db->prepare($sql);
+        $stmt = $this->db->prepare($sql);
         $stmt->execute();
 
         $sql = "ALTER TABLE `token`
     ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) 
     ON DELETE CASCADE";
 
-        $stmt = $db->prepare($sql);
+        $stmt = $this->db->prepare($sql);
         $stmt->execute();
 
-
-        $password = password_hash("test", PASSWORD_BCRYPT);
-
-        $sql = "INSERT INTO user (username, email, password, city, street) VALUES (:username, :email, :password, :city, :street)";
-        $stmt = $db->prepare($sql);
-        $stmt->bindValue(':username', "Test");
-        $stmt->bindValue(':email', "test@gmail.com");
-        $stmt->bindValue(':password', $password);
-        $stmt->bindValue(':city', "Osijek");
-        $stmt->bindValue(':street', "Osjecka 21");
-        return $stmt->execute();
+        return true;
     }
+
+    
+
+
 }
