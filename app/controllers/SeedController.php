@@ -15,7 +15,8 @@ class SeedController
         $tables = $this->Seed->read();
 
         if ($tables == false) {
-            die("Database " .DB_NAME. " is already populated");
+            die("Database " .DB_NAME. " is already populated. To seed again please
+            delete all tables from the database");
         }else{
             die("You have successfully populated the " .DB_NAME. " database");
         }   
