@@ -3,11 +3,13 @@
 class AccountController extends Controller
 {
     private $user;
+    private $session;
 
     public function __construct()
     {
         parent::__construct();
         $this->user = new User; 
+        $this->session = SessionController::getInstance(); 
     }
 
     public function indexLogin($message = NULL)
@@ -46,7 +48,7 @@ class AccountController extends Controller
 
         $user = $this->user->findWithEmail($email);
 
-        $validation = $this->validateLogin($email, $password, $user);
+        $validation = $this->validateLogin($user);
 
         if ($validation !== "validated") {
             $this->indexLogin($validation);
@@ -55,16 +57,13 @@ class AccountController extends Controller
 
         //If $validateLogin passes we proceed to login the user
         if (empty($_POST["rememberme"])) {
-            $session = SessionController::getInstance();
-            $session->setSession($user['id'], $user['username'], $user['email']);
+            $this->session->setSession($user['id'], $user['username'], $user['email']);
             ROUTER::redirect("home/index");
             exit;
         } else {
-
             $token = new TokenController;
             $token->create($user['id']);
-            $session = SessionController::getInstance();
-            $session->setSession($user['id'], $user['username'], $user['email']);
+            $this->session->setSession($user['id'], $user['username'], $user['email']);
             ROUTER::redirect("home/index");
             exit;
         }
@@ -72,13 +71,11 @@ class AccountController extends Controller
 
     public function logout($message = NULL)
     {
-
         if (!SessionController::loggedIn()) {
             die("Access denied");
         }
 
-        $session = SessionController::getInstance();
-        $session->destroySession();
+        $this->session->destroySession();
 
         setcookie(
             'remember',
@@ -92,7 +89,7 @@ class AccountController extends Controller
 
     public function register()
     {
-        // validate the input
+
         $validation = $this->validateRegistration();
 
         if ($validation !== "validated") {
@@ -114,8 +111,7 @@ class AccountController extends Controller
         $result = $this->user->create($username, $email, $passwordHash, $city, $street);
         $id = $this->user->lastId();
 
-        $session = SessionController::getInstance();
-        $session->setSession($id, $username, $email);
+        $this->session->setSession($id, $username, $email);
 
         if ($result) {
             $this->view->render('home/index');
@@ -164,19 +160,16 @@ class AccountController extends Controller
         }
     }
 
-    public function validateLogin($email, $password, $user)
+    public function validateLogin($user)
     {
-
-        $email = !empty($_POST['email']) ? trim($_POST['email']) : null;
-        $password = !empty($_POST['password']) ? trim($_POST['password']) : null;
-
-        if ($email == null) {
+        
+        if ($_POST['email']==null) {
             $message = "You must enter email";
             return $message;
             // die("You must enter username");
         }
 
-        if ($password == null) {
+        if ($_POST['password']==null) {
             $message = "You must enter password";
             return $message;
         }
@@ -186,7 +179,7 @@ class AccountController extends Controller
             return $message;
         }
 
-        $validPassword = password_verify($password, $user['password']);
+        $validPassword = password_verify($_POST['password'], $user['password']);
 
         if (!$validPassword) {
             //$validPassword was FALSE. Passwords do not match.
@@ -220,11 +213,15 @@ class AccountController extends Controller
             return $message;
         }
 
+        if (strlen($_POST["password"] < 8)) {
+            $message = "Password must be at least 8 characters long";
+            return $message;
+        }
+
         if ($_POST["password"] != $_POST["password2"]) {
             $message = "Your password doesnt match";
             return $message;
         }
-
 
         $email = $_POST["email"];
         
