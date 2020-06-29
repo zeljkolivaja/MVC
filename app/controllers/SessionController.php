@@ -45,7 +45,6 @@ class SessionController extends Controller
 
     public function destroySession()
     {
-        $_SESSION = array();
         session_destroy();
     }
 

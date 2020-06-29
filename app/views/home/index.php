@@ -9,6 +9,8 @@
  <p><span id="serverResponse"></span></p>
  <p> Click the button to see how many images there is currently in the database </p>
 
+
+
  <button type="button" class="btn btn-primary" onclick="setTimeout(ajaxcall, 1000)">Click me</button>
 
  <script type="text/javascript">

@@ -5,7 +5,9 @@
 
  <?php $this->start('body'); ?>
 
- <div class="text-center"><h1>IMAGE UPLOAD</h1></div>
+ <div class="text-center">
+   <h1>IMAGE UPLOAD</h1>
+ </div>
 
  <form action="<?= PROOT ?>image/insert" method="POST" enctype='multipart/form-data'>
 
@@ -26,18 +28,20 @@
 
  </form>
 
- <?php  if($message != ""): ?>
-<div class="alert alert-danger" role="alert">
-<?php echo $message; ?>
-</div>
- <?php endif?>
- 
+ <?php if ($message != "") : ?>
+   <div class="alert alert-danger" role="alert">
+     <?php echo $message; ?>
+   </div>
+ <?php endif ?>
+
 
  <hr>
 
 
-<br/>
-<div class="text-center"><h1>IMAGE GALLLERY</h1></div>
+ <br />
+ <div class="text-center">
+   <h1>IMAGE GALLLERY</h1>
+ </div>
  <table class="table">
    <thead class="thead-dark">
      <tr>
@@ -58,19 +62,20 @@
 
        <tr>
          <th scope="row"><?= $counter++ ?> </th>
-         <td> <?= $user->username ?> </td>
-         <td> <?= $user->email ?> </td>
-         <td><?= $user->street . ", " . $user->city ?> </td>
-         <td><?= $user->name ?> </td>
+         <td> <?php e($user->username) ?> </td>
+         <td> <?php e($user->email) ?> </td>
+         <td><?php e($user->street) . ", " . e($user->city) ?> </td>
+         <td><?php e($user->imageName) ?> </td>
          <td><a target="_blank" href="<?= PROOT . $user->path ?>">
              <img style="width: 50px; height: 50x" src="<?= PROOT . $user->path ?>" alt=""></a></td>
          <td>
-         <?php if ($_SESSION["userid"] == $user->imageUserId): ?>
-           <form action="image/delete" method="POST">
-             <input type="hidden" name="imageOwnerId" value="<?= $user->imageUserId ?>">
-             <input type="hidden" name="imageId" value="<?= $user->imageId ?>">
-             <input type="hidden" name="path" value="<?=$user->path ?>">
-             <button type="submit" class="btn btn-danger">Delete Image</button>
+           <?php if ($_SESSION["userid"] == $user->imageUserId) : ?>
+             <form action="image/delete" method="POST">
+               <input type="hidden" name="csrf" value="<?= $_SESSION['csrf'] ?>">
+               <input type="hidden" name="imageOwnerId" value="<?= $user->imageUserId ?>">
+               <input type="hidden" name="imageId" value="<?= $user->imageId ?>">
+               <input type="hidden" name="path" value="<?= $user->path ?>">
+               <button type="submit" class="btn btn-danger">Delete Image</button>
              <?php endif ?>
          </td>
        </tr>

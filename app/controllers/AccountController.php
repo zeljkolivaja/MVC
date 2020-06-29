@@ -86,7 +86,9 @@ class AccountController extends Controller
             '/'
         );
 
-        $this->indexLogin($message);
+        // $this->indexLogin($message);
+        ROUTER::redirect("home/index");
+
     }
 
     public function register()

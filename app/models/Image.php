@@ -33,7 +33,7 @@ class Image extends Model
         user.city,
         user.street,
         image.id as imageId, 
-        image.name,
+        image.name as imageName,
         image.path, 
         image.user_id as imageUserId
         FROM user 

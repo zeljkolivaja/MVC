@@ -43,7 +43,7 @@ class ImageController extends Controller
         //insert image into database
         $this->image->insert($path, $imageName);
 
-        ROUTER::redirect("image/index");
+        ROUTER::redirect("image");
     }
 
 

@@ -7,3 +7,9 @@ function dnd($data){
     die();
 
 }
+
+
+function e($data)
+{
+    echo htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
+}
