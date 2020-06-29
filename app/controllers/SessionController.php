@@ -1,7 +1,7 @@
 <?php
 
-Class SessionController extends Controller
-{ 
+class SessionController extends Controller
+{
 
 
     // I like this approach. The only thing I did differently was, rather than relying solely on 
@@ -10,46 +10,51 @@ Class SessionController extends Controller
     // without having to wait for the PHP session to expire. 
 
 
-private static $_instance=null; 
+    private static $_instance = null;
 
-private function __construct()
-{
-    # code...
-}
-
-
-public static function getInstance()
-{
-   
-    if (!isset(self::$_instance)) {
-        self::$_instance = new SessionController();
-    }
-    return self::$_instance;
-}
-
-public function setSession($id, $username, $email, $csrf)
-{
-    $_SESSION["username"] = $username;
-    $_SESSION['userid'] = $id;
-    $_SESSION['email'] = $email;
-    $_SESSION['csrf'] = $csrf;
-}
-
-public function destroySession()
-{
-    $_SESSION = array();
-    session_destroy();
-
-}
-
-public static function loggedIn()
-{
-    if(!empty($_SESSION['userid']))
+    private function __construct()
     {
+        # code...
+    }
+
+
+    public static function getInstance()
+    {
+
+        if (!isset(self::$_instance)) {
+            self::$_instance = new SessionController();
+        }
+        return self::$_instance;
+    }
+
+    public function setSession($id, $username, $email, $csrf)
+    {
+        $_SESSION["username"] = $username;
+        $_SESSION['userid'] = $id;
+        $_SESSION['email'] = $email;
+        $_SESSION['csrf'] = $csrf;
+    }
+
+    public function checkCsrf($csrf)
+    {
+        if ($_SESSION["csrf"] != $csrf) {
+            return false;
+        }
         return true;
     }
 
-    return false;
-}
+    public function destroySession()
+    {
+        $_SESSION = array();
+        session_destroy();
+    }
 
+    public static function loggedIn()
+    {
+        if (!empty($_SESSION['userid'])) {
+            return true;
+        }
+
+        return false;
+    }
 }

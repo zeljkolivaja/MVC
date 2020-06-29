@@ -28,7 +28,7 @@ class Seed extends Model
                 $sql = "CREATE TABLE `user` (
                     `id` int(11) UNSIGNED NOT NULL primary key auto_increment,
                     `username` varchar(255) NOT NULL,
-                    `email` varchar(255) NOT NULL,
+                    `email` varchar(255) NOT NULL UNIQUE,
                     `password` varchar(255) NOT NULL,
                     `city` varchar(50) DEFAULT NULL,
                     `street` varchar(150) DEFAULT NULL

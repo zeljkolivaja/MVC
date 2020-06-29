@@ -26,6 +26,9 @@
          <input type="password" required class="form-control" name="passwordNew2" id="exampleInputPassword1">
      </div>
 
+     <input type="hidden" name="csrf" value="<?= $_SESSION['csrf'] ?>">
+
+
      <button type="submit" class="btn btn-primary">Submit</button>
 
  </form>

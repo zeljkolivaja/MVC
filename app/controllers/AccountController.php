@@ -44,7 +44,6 @@ class AccountController extends Controller
     {
 
         $email = $_POST["email"];
-        $password = $_POST["password"];
 
         $user = $this->user->findWithEmail($email);
 
@@ -124,15 +123,11 @@ class AccountController extends Controller
 
     public function delete()
     {
-        if (!SessionController::loggedIn()) {
+        if (!SessionController::loggedIn() OR !$this->session->checkCsrf($_POST["csrf"])) {
             die("Access denied");
+            exit;
         }
-
-        if ($_SESSION["csrf"] != $_POST["csrf"]) {
-            die("Access denied");
-
-        }
-
+        
         $id = $_POST["id"];
         //gets the all user images store on hard drive
         $imageModel = new Image;
@@ -145,6 +140,11 @@ class AccountController extends Controller
 
     public function updatePassword()
     {
+        if (!SessionController::loggedIn() OR !$this->session->checkCsrf($_POST["csrf"])) {
+            die("Access denied");
+            exit;
+        }
+   
         $passwordNew = $_POST["passwordNew"];
         $passwordNew2 = $_POST["passwordNew2"];
         $passwordOld = $_POST["passwordOld"];
