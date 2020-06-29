@@ -27,13 +27,12 @@ public static function getInstance()
     return self::$_instance;
 }
 
-public function setSession($id, $username, $email)
+public function setSession($id, $username, $email, $csrf)
 {
     $_SESSION["username"] = $username;
     $_SESSION['userid'] = $id;
     $_SESSION['email'] = $email;
-    $_SESSION['logged_in'] = time();
-
+    $_SESSION['csrf'] = $csrf;
 }
 
 public function destroySession()

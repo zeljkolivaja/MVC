@@ -55,15 +55,18 @@ class AccountController extends Controller
             exit;
         }
 
+        $csrf = base64_encode( openssl_random_pseudo_bytes(32));
+
+
         //If $validateLogin passes we proceed to login the user
         if (empty($_POST["rememberme"])) {
-            $this->session->setSession($user['id'], $user['username'], $user['email']);
+            $this->session->setSession($user['id'], $user['username'], $email ,$csrf);
             ROUTER::redirect("home/index");
             exit;
         } else {
             $token = new TokenController;
             $token->create($user['id']);
-            $this->session->setSession($user['id'], $user['username'], $user['email']);
+            $this->session->setSession($user['id'], $user['username'], $user['email'], $csrf);
             ROUTER::redirect("home/index");
             exit;
         }
@@ -111,7 +114,8 @@ class AccountController extends Controller
         $result = $this->user->create($username, $email, $passwordHash, $city, $street);
         $id = $this->user->lastId();
 
-        $this->session->setSession($id, $username, $email);
+        $csrf = base64_encode( openssl_random_pseudo_bytes(32));
+        $this->session->setSession($id, $username, $email,$csrf);
 
         if ($result) {
             $this->view->render('home/index');
@@ -122,6 +126,11 @@ class AccountController extends Controller
     {
         if (!SessionController::loggedIn()) {
             die("Access denied");
+        }
+
+        if ($_SESSION["csrf"] != $_POST["csrf"]) {
+            die("Access denied");
+
         }
 
         $id = $_POST["id"];
@@ -213,7 +222,9 @@ class AccountController extends Controller
             return $message;
         }
 
-        if (strlen($_POST["password"] < 8)) {
+        $passLenght = $_POST["password"];
+
+         if (strlen($passLenght) < 8) {
             $message = "Password must be at least 8 characters long";
             return $message;
         }

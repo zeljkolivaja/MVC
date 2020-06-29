@@ -21,6 +21,6 @@ class HomeController extends Controller
     public function getTotalImages()
     {
         $totalImages = $this->image->getTotalImages();
-        echo $totalImages;
+        echo json_encode($totalImages) ;
     }
 }

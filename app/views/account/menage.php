@@ -10,14 +10,14 @@
  <br>
 
 
-<p> <a href="<?= PROOT ?>account/indexChangePassword" class="btn btn-primary">
-     Change your password
- </a>
+ <p> <a href="<?= PROOT ?>account/indexChangePassword" class="btn btn-primary">
+         Change your password
+     </a>
  </p>
 
-<form action="<?= PROOT?>account/delete/?>" method="POST" 
- onsubmit="return confirm('Are you sure you want to delete your account?')">
- <input type="hidden" name="id" value="<?= $_SESSION['userid'] ?>">
+ <form action="<?= PROOT ?>account/delete/?>" method="POST" onsubmit="return confirm('Are you sure you want to delete your account?')">
+     <input type="hidden" name="id" value="<?= $_SESSION['userid'] ?>">
+     <input type="hidden" name="csrf" value="<?= $_SESSION['csrf'] ?>">
      <button type="submit" class="btn btn-danger">DELETE ACCOUNT</button>
  </form>
 

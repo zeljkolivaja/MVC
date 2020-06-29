@@ -35,7 +35,7 @@ session_start();
 // kreiramo array sa vrijednostima nakon trenutne skripte npr ruah/name/12 ce nam dati
 // arrays [0 = > name , 1 => 12]
 $url = isset($_SERVER['PATH_INFO']) ? explode('/', ltrim($_SERVER['PATH_INFO'], '/')) : [];
- 
+
 //routanje requesta
 Router::route($url);
 
