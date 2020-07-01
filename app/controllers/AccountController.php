@@ -43,16 +43,32 @@ class AccountController extends Controller
     public function login()
     {
 
-        $email = $_POST["email"];
-
-        $user = $this->user->findWithEmail($email);
-
-        $validation = $this->validateLogin($user);
+        $validation = $this->validateLogin();
 
         if ($validation !== "validated") {
             $this->indexLogin($validation);
             exit;
         }
+
+        // $email = $_POST["email"];
+        $email = filter_var($_POST["email"], FILTER_SANITIZE_EMAIL);
+        $user = $this->user->findWithEmail($email);
+
+        if ($user === false) {
+            $message = "Could not find a user with that email adress!";
+            $this->indexLogin($message);
+            exit;
+        }
+
+        $validPassword = password_verify($_POST['password'], $user['password']);
+
+        if (!$validPassword) {
+            //$validPassword was FALSE. Passwords do not match.
+            $message = "Password incorrect!";
+            $this->indexLogin($message);
+            exit;
+        }
+
 
         $csrf = base64_encode(openssl_random_pseudo_bytes(32));
 
@@ -164,30 +180,21 @@ class AccountController extends Controller
         }
     }
 
-    private function validateLogin($user)
+    private function validateLogin()
     {
 
         if ($_POST['email'] == null) {
             $message = "You must enter email";
             return $message;
-            // die("You must enter username");
         }
 
-        if ($_POST['password'] == null) {
-            $message = "You must enter password";
+        if (!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
+            $message = "Invalid email format";
             return $message;
         }
 
-        if ($user === false) {
-            $message = "Could not find a user with that email adress!";
-            return $message;
-        }
-
-        $validPassword = password_verify($_POST['password'], $user['password']);
-
-        if (!$validPassword) {
-            //$validPassword was FALSE. Passwords do not match.
-            $message = "Password incorrect!";
+        if ($_POST['password'] == null or strlen($_POST['password']) < 8) {
+            $message = "Password must be at least 8 characters long";
             return $message;
         }
 

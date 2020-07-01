@@ -9,19 +9,18 @@ class ImageController extends Controller
     public function __construct()
     {
         parent::__construct();
-        
+
         if (!SessionController::loggedIn()) {
             die("Access denied");
         }
-        $this->session = SessionController::getInstance(); 
+        $this->session = SessionController::getInstance();
 
         $this->image = new Image;
-
     }
 
     public function index($message = NULL)
     {
-      
+
         $images = $this->image->read();
 
         $this->view->render('image/index', ["images" => $images, "message" => $message]);
@@ -29,11 +28,7 @@ class ImageController extends Controller
 
     public function insert()
     {
-
-        if (!isset($_POST["csrf"]) or !$this->session->checkCsrf($_POST["csrf"])) {
-            die("Access denied");
-            exit;
-        }
+        $this->checkCSRF();
 
         $imageName = $_POST["name"];
         $this->imageValidation($_FILES["image"]);
@@ -56,21 +51,18 @@ class ImageController extends Controller
         ROUTER::redirect("image");
     }
 
-
+   
     public function delete()
     {
 
-        if (!isset($_POST["csrf"]) or !$this->session->checkCsrf($_POST["csrf"])) {
-            die("Access denied");
-            exit;
-        }
+        $this->checkCSRF();
 
         $ImageId = $_POST["imageId"];
         $imageOwnerId = $_POST["imageOwnerId"];
         $path = $_POST["path"];
-        
-        $dirPath = ROOT . DS . str_replace("/",DS,$path);
-    
+
+        $dirPath = ROOT . DS . str_replace("/", DS, $path);
+
         if ($_SESSION["userid"] == $imageOwnerId) {
             $this->image->delete($ImageId, $dirPath);
         }
@@ -84,14 +76,14 @@ class ImageController extends Controller
         $fileTmpName = $file["tmp_name"];
         $fileSize = $file["size"];
         $fileError = $file["error"];
-        
+
         $size = getimagesize($fileTmpName);
         if (!$size) {
 
             $message = "File type error";
             $this->index($message);
             exit;
-         }
+        }
 
         $valid_types = array(IMAGETYPE_JPEG, IMAGETYPE_PNG);
 
@@ -113,4 +105,13 @@ class ImageController extends Controller
             exit;
         }
     }
+
+    private function checkCSRF()
+    {
+        if (!isset($_POST["csrf"]) or !$this->session->checkCsrf($_POST["csrf"])) {
+            die("Access denied");
+            exit;
+        }
+    }
+
 }
