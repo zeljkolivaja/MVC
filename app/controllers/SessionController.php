@@ -37,6 +37,7 @@ class SessionController extends Controller
 
     public function checkCsrf($csrf)
     {
+
         if ($_SESSION["csrf"] != $csrf) {
             return false;
         }

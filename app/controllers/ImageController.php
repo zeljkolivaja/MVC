@@ -3,6 +3,8 @@
 class ImageController extends Controller
 {
     private $image;
+    private $session;
+
 
     public function __construct()
     {
@@ -11,6 +13,8 @@ class ImageController extends Controller
         if (!SessionController::loggedIn()) {
             die("Access denied");
         }
+        $this->session = SessionController::getInstance(); 
+
         $this->image = new Image;
 
     }
@@ -25,6 +29,12 @@ class ImageController extends Controller
 
     public function insert()
     {
+
+        if (!isset($_POST["csrf"]) or !$this->session->checkCsrf($_POST["csrf"])) {
+            die("Access denied");
+            exit;
+        }
+
         $imageName = $_POST["name"];
         $this->imageValidation($_FILES["image"]);
 
@@ -49,6 +59,12 @@ class ImageController extends Controller
 
     public function delete()
     {
+
+        if (!isset($_POST["csrf"]) or !$this->session->checkCsrf($_POST["csrf"])) {
+            die("Access denied");
+            exit;
+        }
+
         $ImageId = $_POST["imageId"];
         $imageOwnerId = $_POST["imageOwnerId"];
         $path = $_POST["path"];
@@ -63,7 +79,7 @@ class ImageController extends Controller
     }
 
 
-    public function imageValidation($file)
+    private function imageValidation($file)
     {
         $fileTmpName = $file["tmp_name"];
         $fileSize = $file["size"];

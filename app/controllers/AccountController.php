@@ -8,8 +8,8 @@ class AccountController extends Controller
     public function __construct()
     {
         parent::__construct();
-        $this->user = new User; 
-        $this->session = SessionController::getInstance(); 
+        $this->user = new User;
+        $this->session = SessionController::getInstance();
     }
 
     public function indexLogin($message = NULL)
@@ -54,12 +54,12 @@ class AccountController extends Controller
             exit;
         }
 
-        $csrf = base64_encode( openssl_random_pseudo_bytes(32));
+        $csrf = base64_encode(openssl_random_pseudo_bytes(32));
 
 
         //If $validateLogin passes we proceed to login the user
         if (empty($_POST["rememberme"])) {
-            $this->session->setSession($user['id'], $user['username'], $email ,$csrf);
+            $this->session->setSession($user['id'], $user['username'], $email, $csrf);
             ROUTER::redirect("home/index");
             exit;
         } else {
@@ -71,7 +71,7 @@ class AccountController extends Controller
         }
     }
 
-    public function logout($message = NULL)
+    public function logout()
     {
         if (!SessionController::loggedIn()) {
             die("Access denied");
@@ -88,7 +88,6 @@ class AccountController extends Controller
 
         // $this->indexLogin($message);
         ROUTER::redirect("home/index");
-
     }
 
     public function register()
@@ -111,25 +110,23 @@ class AccountController extends Controller
         $passwordHash = password_hash($password, PASSWORD_BCRYPT);
 
         //Prepare our INSERT statement.
- 
+
         $result = $this->user->create($username, $email, $passwordHash, $city, $street);
         $id = $this->user->lastId();
 
-        $csrf = base64_encode( openssl_random_pseudo_bytes(32));
-        $this->session->setSession($id, $username, $email,$csrf);
+        $csrf = base64_encode(openssl_random_pseudo_bytes(32));
+        $this->session->setSession($id, $username, $email, $csrf);
 
         if ($result) {
             $this->view->render('home/index');
         }
     }
 
+
     public function delete()
     {
-        if (!SessionController::loggedIn() OR !$this->session->checkCsrf($_POST["csrf"])) {
-            die("Access denied");
-            exit;
-        }
-        
+     
+        $this->checkCsrfandLogin();
         $id = $_POST["id"];
         //gets the all user images store on hard drive
         $imageModel = new Image;
@@ -142,11 +139,8 @@ class AccountController extends Controller
 
     public function updatePassword()
     {
-        if (!SessionController::loggedIn() OR !$this->session->checkCsrf($_POST["csrf"])) {
-            die("Access denied");
-            exit;
-        }
-   
+        $this->checkCsrfandLogin();
+
         $passwordNew = $_POST["passwordNew"];
         $passwordNew2 = $_POST["passwordNew2"];
         $passwordOld = $_POST["passwordOld"];
@@ -156,31 +150,30 @@ class AccountController extends Controller
         $user = $this->user->read($id);
         $realPassword = $user['password'];
 
-        $this->checkPasswordMatch($passwordNew,$passwordNew2);
-        $validation = $this->validateUpdatePassword($passwordOld,$realPassword);
-    
+        $this->checkPasswordMatch($passwordNew, $passwordNew2);
+        $validation = $this->validateUpdatePassword($passwordOld, $realPassword);
+
         if ($validation) {
             //Hash the password as we do NOT want to store our passwords in plain text.
             $passwordHash = password_hash($passwordNew, PASSWORD_BCRYPT);
             $result = $this->user->update($passwordHash, $id);
             //If the signup process is successful.
             if ($result) {
-                $message = "You have changed your password";
-                $this->logout($message);
+                $this->logout();
             }
         }
     }
 
-    public function validateLogin($user)
+    private function validateLogin($user)
     {
-        
-        if ($_POST['email']==null) {
+
+        if ($_POST['email'] == null) {
             $message = "You must enter email";
             return $message;
             // die("You must enter username");
         }
 
-        if ($_POST['password']==null) {
+        if ($_POST['password'] == null) {
             $message = "You must enter password";
             return $message;
         }
@@ -201,7 +194,7 @@ class AccountController extends Controller
         return "validated";
     }
 
-    public function validateRegistration()
+    private function validateRegistration()
     {
 
         if ($_POST["username"] === "") {
@@ -226,7 +219,7 @@ class AccountController extends Controller
 
         $passLenght = $_POST["password"];
 
-         if (strlen($passLenght) < 8) {
+        if (strlen($passLenght) < 8) {
             $message = "Password must be at least 8 characters long";
             return $message;
         }
@@ -237,7 +230,7 @@ class AccountController extends Controller
         }
 
         $email = $_POST["email"];
-        
+
 
         if (!$this->user->checkEmail($email)) {
             $message = "Email already registered";
@@ -247,7 +240,7 @@ class AccountController extends Controller
         return "validated";
     }
 
-    public function validateUpdatePassword($passwordOld, $realPassword)
+    private function validateUpdatePassword($passwordOld, $realPassword)
     {
 
         $validPassword = password_verify($passwordOld, $realPassword);
@@ -260,7 +253,7 @@ class AccountController extends Controller
         return true;
     }
 
-    public function checkPasswordMatch($pass1, $pass2)
+    private function checkPasswordMatch($pass1, $pass2)
     {
         if ($pass1 != $pass2) {
             $message = "Your new password doesnt match";
@@ -268,4 +261,17 @@ class AccountController extends Controller
             exit;
         }
     }
+
+    private function checkCsrfandLogin()
+    {
+        if (
+            !SessionController::loggedIn() or
+            !isset($_POST["csrf"]) or
+            !$this->session->checkCsrf($_POST["csrf"])
+        ) {
+            die("Access denied");
+            exit;
+        }
+    }
+
 }

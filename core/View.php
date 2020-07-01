@@ -4,7 +4,6 @@ class View
 {
 
     protected $_head, $_body, $_siteTitle = SITE_TITLE, $_outputBuffer, $_layout = DEFAULT_LAYOUT;
-    public $test = "bla";
 
     public function __construct()
     {
@@ -13,7 +12,6 @@ class View
     public function render($viewName, $data=[])
     {
 
-        // za kompatibilnost u razlicitim sistemima
         $viewArry = explode('/', $viewName);
         $viewString = implode(DS, $viewArry);
         extract($data);
@@ -43,7 +41,6 @@ class View
         // storamo head ili body u _outputBuffer
         $this->_outputBuffer = $type;
 
-        //pogledati sta je
         ob_start();
 
     }
