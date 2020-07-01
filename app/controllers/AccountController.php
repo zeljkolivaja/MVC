@@ -17,9 +17,9 @@ class AccountController extends Controller
         $this->view->render('account/signin', ["message" => $message , "email" => $email]);
     }
 
-    public function indexRegister($message = NULL)
+    public function indexRegister($message = NULL, $userData = [])
     {
-        $this->view->render('account/signup', ["message" => $message]);
+        $this->view->render('account/signup', ["message" => $message, "userData" => $userData]);
     }
 
     public function indexChangePassword($message = NULL)
@@ -111,27 +111,32 @@ class AccountController extends Controller
 
         $validation = $this->validateRegistration();
 
+        $userData =  [
+            "username" => trim( preg_replace('/\s+/', ' ', $_POST["username"])),
+            "email" => $_POST["email"],
+            "city" => trim( preg_replace('/\s+/', ' ', $_POST["city"])),
+            "street"=> trim( preg_replace('/\s+/', ' ', $_POST["street"]))
+        ];
+
         if ($validation !== "validated") {
-            $this->indexRegister($validation);
+            $this->indexRegister($validation, $userData);
             exit;
         }
 
-        $username = $_POST["username"];
-        $email = $_POST["email"];
         $password = $_POST["password"];
-        $city = $_POST["city"];
-        $street = $_POST["street"];
-
+  
         //Hash the password as we do NOT want to store our passwords in plain text.
         $passwordHash = password_hash($password, PASSWORD_BCRYPT);
 
         //Prepare our INSERT statement.
 
-        $result = $this->user->create($username, $email, $passwordHash, $city, $street);
+        // $result = $this->user->create($username, $email, $passwordHash, $city, $street);
+       
+        $result = $this->user->create($userData["username"], $userData["email"], $passwordHash, $userData["city"], $userData["street"]);
         $id = $this->user->lastId();
 
         $csrf = base64_encode(openssl_random_pseudo_bytes(32));
-        $this->session->setSession($id, $username, $email, $csrf);
+        $this->session->setSession($id, $userData["username"], $userData["email"], $csrf);
 
         if ($result) {
             $this->view->render('home/index');
@@ -204,12 +209,12 @@ class AccountController extends Controller
     private function validateRegistration()
     {
 
-        if ($_POST["username"] === "") {
+        if ($_POST["username"] == NULL) {
             $message = "You must enter username";
             return $message;
         }
 
-        if ($_POST["email"] === "") {
+        if ($_POST["email"] == NULL) {
             $message = "You must enter email";
             return $message;
         }
@@ -219,7 +224,7 @@ class AccountController extends Controller
             return $message;
         }
 
-        if ($_POST["password"] === "") {
+        if ($_POST["password"] == NULL) {
             $message = "You must enter password";
             return $message;
         }

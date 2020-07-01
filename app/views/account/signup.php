@@ -13,12 +13,12 @@
 
      <div class="form-group">
          <label for="username">Username</label>
-         <input type="text" required class="form-control" name="username" id="username">
+         <input type="text" value ='<?= $userData["username"] ?? ""?>' required class="form-control" name="username" id="username">
      </div>
 
      <div class="form-group">
          <label for="email">Email address</label>
-         <input type="email" required class="form-control" name="email" id="email" aria-describedby="emailHelp">
+         <input type="email" value ='<?= $userData["email"] ?? ""?>' required class="form-control" name="email" id="email" aria-describedby="emailHelp">
          <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
      </div>
 
@@ -35,13 +35,13 @@
 
      <div class="form-group">
          <label for="city">City</label>
-         <input type="text" required class="form-control" name="city" id="city">
+         <input type="text" value ='<?= $userData["city"] ?? ""?>' required class="form-control" name="city" id="city">
      </div>
 
 
      <div class="form-group">
          <label for="street">Street</label>
-         <input type="text" required class="form-control" name="street" id="street">
+         <input type="text" value ='<?= $userData["street"] ?? ""?>' required class="form-control" name="street" id="street">
      </div>
 
      <button type="submit" class="btn btn-primary">Submit</button>
