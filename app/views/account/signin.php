@@ -13,7 +13,7 @@
 
      <div class="form-group">
          <label for="email">Email</label>
-         <input type="email" required class="form-control" name="email"  id="email">
+         <input type="email" value='<?= $email ?? "" ?>' required class="form-control" name="email"  id="email">
      </div>
 
      <div class="form-group">

@@ -12,9 +12,9 @@ class AccountController extends Controller
         $this->session = SessionController::getInstance();
     }
 
-    public function indexLogin($message = NULL)
+    public function indexLogin($message = NULL, $email = NULL)
     {
-        $this->view->render('account/signin', ["message" => $message]);
+        $this->view->render('account/signin', ["message" => $message , "email" => $email]);
     }
 
     public function indexRegister($message = NULL)
@@ -44,19 +44,19 @@ class AccountController extends Controller
     {
 
         $validation = $this->validateLogin();
+        $email = filter_var($_POST["email"], FILTER_SANITIZE_EMAIL);
+
 
         if ($validation !== "validated") {
-            $this->indexLogin($validation);
+            $this->indexLogin($validation, $email);
             exit;
         }
 
-        // $email = $_POST["email"];
-        $email = filter_var($_POST["email"], FILTER_SANITIZE_EMAIL);
-        $user = $this->user->findWithEmail($email);
+         $user = $this->user->findWithEmail($email);
 
         if ($user === false) {
             $message = "Could not find a user with that email adress!";
-            $this->indexLogin($message);
+            $this->indexLogin($message,$email);
             exit;
         }
 
@@ -65,7 +65,7 @@ class AccountController extends Controller
         if (!$validPassword) {
             //$validPassword was FALSE. Passwords do not match.
             $message = "Password incorrect!";
-            $this->indexLogin($message);
+            $this->indexLogin($message,$email);
             exit;
         }
 
