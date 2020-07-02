@@ -31,7 +31,7 @@ class ImageController extends Controller
         $this->checkCSRF();
 
         $imageName = $_POST["name"];
-        $this->imageValidation($_FILES["image"]);
+        $this->imageValidation($_FILES["image"],$imageName);
 
         $fileName = $_FILES["image"]["name"];
         $fileTmpName = $_FILES["image"]["tmp_name"];
@@ -71,8 +71,15 @@ class ImageController extends Controller
     }
 
 
-    private function imageValidation($file)
+    private function imageValidation($file,$imageName)
     {
+
+        if($imageName == NULL){
+            $message = "You must enter image name";
+            $this->index($message);
+            exit;
+        }
+
         $fileTmpName = $file["tmp_name"];
         $fileSize = $file["size"];
         $fileError = $file["error"];

@@ -73,7 +73,7 @@ class AccountController extends Controller
         $csrf = base64_encode(openssl_random_pseudo_bytes(32));
 
 
-        //If $validateLogin passes we proceed to login the user
+        //we proceed to login the user
         if (empty($_POST["rememberme"])) {
             $this->session->setSession($user['id'], $user['username'], $email, $csrf);
             ROUTER::redirect("home/index");

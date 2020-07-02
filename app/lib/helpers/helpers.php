@@ -5,11 +5,16 @@ function dnd($data){
     var_dump($data);
     echo '</pre>';
     die();
-
 }
 
 
-function e($data)
-{
+function e($data){
     echo htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
+}
+
+function message($message = NULL){
+  if ($message != NULL)
+       echo '<div class="alert alert-danger" role="alert">';
+       echo $message;
+       echo '</div>';
 }

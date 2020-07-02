@@ -1,6 +1,6 @@
 <?php
 
-class User extends Model  
+class User extends Model
 {
 
     public function __construct()
@@ -35,10 +35,10 @@ class User extends Model
 
     public function delete($id)
     {
-       $sql = ("DELETE FROM user WHERE id = :id");
-       $stmt= $this->db->prepare($sql);
-       $stmt->bindValue(':id', $id);
-       $stmt->execute();
+        $sql = ("DELETE FROM user WHERE id = :id");
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':id', $id);
+        $stmt->execute();
     }
 
 
@@ -51,33 +51,20 @@ class User extends Model
     public function read($id)
     {
 
-        //Retrieve the user account information for the given id.
         $sql = "SELECT username, email, password FROM user WHERE id = :id";
         $stmt = $this->db->prepare($sql);
-
-        //Bind value.
         $stmt->bindValue(':id', $id);
-
-        //Execute.
         $stmt->execute();
-
-        //Fetch row.
-         return $stmt->fetch(PDO::FETCH_ASSOC);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     public function findWithEmail($email)
     {
-          $sql = "SELECT id, username, password FROM user WHERE email = :email";
-          $stmt = $this->db->prepare($sql);
-  
-          //Bind value.
-          $stmt->bindValue(':email', $email);
-  
-          //Execute.
-          $stmt->execute();
-  
-          //Fetch row.
-           return $stmt->fetch(PDO::FETCH_ASSOC);
+        $sql = "SELECT id, username, password FROM user WHERE email = :email";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':email', $email);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     public function checkEmail($email)
@@ -85,21 +72,14 @@ class User extends Model
         $db = DB::getInstance();
         $sql = "SELECT COUNT(email) AS num FROM user WHERE email = :email";
         $stmt = $db->prepare($sql);
-
-        //Bind the provided username to our prepared statement.
         $stmt->bindValue(':email', $email);
-
-        //Execute.
         $stmt->execute();
-
-        //Fetch the row.
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($row['num'] > 0) {
-             return false;
+            return false;
         }
 
         return "true";
     }
-
 }
