@@ -1,5 +1,4 @@
  <?php $this->start('head'); ?>
- <meta content="test" />
  <?php $this->setSiteTitle("Upload image"); ?>
  <?php $this->end(); ?>
 
@@ -9,7 +8,7 @@
    <h1>IMAGE UPLOAD</h1>
  </div>
 
- <?php include_once "includes/uploadImageFormINCL.php" ?> 
+ <?php include_once "includes/uploadImageForm.incl.php" ?> 
 
 <?php message($message) ?>
 
@@ -21,6 +20,6 @@
  </div>
 
 
- <?php include_once "includes/imageTableINCL.php" ?> 
+ <?php include_once "includes/imageTable.incl.php" ?> 
 
  <?php $this->end(); ?>

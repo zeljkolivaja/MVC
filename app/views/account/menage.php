@@ -5,7 +5,8 @@
  <?php $this->start('body'); ?>
 
  <div>
-     <h2>Hello <?php e($_SESSION["username"]); ?>. <br /> Menage your account</h2>
+     <h2>Hello <?php e($_SESSION["username"]); ?>. <br /></h2>
+     <h4>Menage your account</h4>
  </div>
  <br>
 
