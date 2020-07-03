@@ -9,36 +9,9 @@
      <h2>Change your password</h2>
  </div>
  <br>
- <form action="<?= PROOT ?>account/updatePassword" method="POST">
- 
-     <div class="form-group">
-         <label for="password">Old Password</label>
-         <input type="password" required class="form-control" name="passwordOld" id="exampleInputPassword1">
-     </div>
 
-     <div class="form-group">
-         <label for="passwordNew">New Password</label>
-         <input type="password" required class="form-control" name="passwordNew" id="exampleInputPassword1">
-     </div>
-  
-     <div class="form-group">
-         <label for="passwordNew2">Enter New Password Again</label>
-         <input type="password" required class="form-control" name="passwordNew2" id="exampleInputPassword1">
-     </div>
+<?php include_once "includes/updatePassForm.incl.php" ?>
 
-     <input type="hidden" name="csrf" value="<?= $_SESSION['csrf'] ?>">
-
-
-     <button type="submit" class="btn btn-primary">Submit</button>
-
- </form>
-
- 
- <?php  if($message != NULL): ?>
-<div class="alert alert-danger" role="alert">
-<?php echo $message; ?>
-</div>
- <?php endif?>
-
+<?php message($message) ?>
 
  <?php $this->end();?>
