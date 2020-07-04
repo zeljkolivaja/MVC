@@ -1,20 +1,19 @@
 <?php
 
 
-// postavljamo konstantu DS koja odgovara direcotry separatoru (\, /) koji moze biti razlicit 
-// ovisno o operativnom sustavu, ovako ce uvijek biti tocan jer ce ga php echoati ovisno o OS.u
+//defining constant so the app works in different OS
 define('DS', DIRECTORY_SEPARATOR);
 
-// postavljamo konstantnu ROOT koja odgovara root.u projekta, tako da nemoramo svaki puta pisati cijelo path
-// C:\xampp\htdocs\ruah\index.php
+//root of the project
+// C:\xampp\htdocs\MVC\index.php
 define('ROOT', dirname(__FILE__) );
 
-// loadamo configuration i helper funkcije
+// including config.php and functions.php
 require_once(ROOT . DS . 'config' . DS . 'config.php');
 require_once(ROOT . DS . 'app' . DS . 'lib' . DS . 'helpers' . DS . 'functions.php');
 
 
-//autoloadanje klasa da ih nemoramo svaki puta includati
+//defining where will the spl_autoload_register look for classes to instantiate
 function autoload($className){
     if ( file_exists(ROOT . DS . 'core' . DS . $className . '.php') ) {
         require_once(ROOT . DS . 'core' . DS . $className . '.php');
@@ -29,13 +28,12 @@ function autoload($className){
 
 spl_autoload_register('autoload');
 
-// da bi session upamtio podatke koji su dostupni na citavoj stranici moramo ga zapoceti
 session_start();
  
-// kreiramo array sa vrijednostima nakon trenutne skripte npr ruah/name/12 ce nam dati
-// arrays [0 = > name , 1 => 12]
+// defining array which will get user input after our app url
 $url = isset($_SERVER['PATH_INFO']) ? explode('/', ltrim($_SERVER['PATH_INFO'], '/')) : [];
 
-//routanje requesta
+//sending the $url array to Router class, where the data will be parsed so we can extract 
+//which controller/action/params user wants to load
 Router::route($url);
 

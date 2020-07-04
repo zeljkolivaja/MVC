@@ -38,7 +38,7 @@ class View
 
     public function start($type)
     {
-        // storamo head ili body u _outputBuffer
+        // we store the head or body in _outputBuffer
         $this->_outputBuffer = $type;
 
         ob_start();

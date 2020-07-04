@@ -146,7 +146,6 @@ class AccountController extends Controller
 
     public function delete()
     {
-     
         $this->checkCsrfandLogin();
         $id = $_POST["id"];
         //gets the all user images store on hard drive
