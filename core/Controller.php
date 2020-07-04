@@ -7,17 +7,14 @@ class Controller extends Application{
 
 
     // kreiramo klasu pomocu koje cemo instancirati nase kontrolere
-    // u >__construct prosljedjujemo dva parametra, zeljeni kontroler i akciju
-    // takodjer vrtimo i construct application klase koju nasljedjujemo te instanciramo view 
 
-
+    //class which every controller inherits, it inherits application class where application and php 
+    // ini setting are defined, also we check for remember me cookie if user session is empty
+    // if there is one and its valid we login the user and generate new token
     public function __construct()
     {
         parent::__construct();
         $this->view = new View();
-
-        //if the user session does not exist but there is a remember cookie
-        //check it and if valid log the user in and create new session
 
         if (empty($_SESSION['userid']) && !empty($_COOKIE['remember'])) {
 

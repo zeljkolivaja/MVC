@@ -14,12 +14,10 @@ class Image extends Model
         $sql = "INSERT INTO image (name, path, user_id) VALUES (:name, :path, :user_id)";
         $stmt = $this->db->prepare($sql);
 
-        //Bind our variables.
         $stmt->bindValue(':name', $imageName);
         $stmt->bindValue(':path', $imagePath);
         $stmt->bindValue(':user_id', $userId);
 
-        //Execute the statement and insert the new pciture.
         return $stmt->execute();
     }
 
@@ -79,7 +77,6 @@ class Image extends Model
         $sql = ("DELETE from image WHERE id = :id");
         $stmt = $this->db->prepare($sql);
 
-        //Bind our variables.
         $stmt->bindValue(':id', $imageId);
         $stmt->execute();
         unlink($path);

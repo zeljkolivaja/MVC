@@ -18,7 +18,7 @@
     define('DEBUG', true);
     // default controller when no other specified
     define('DEFAULT_CONTROLLER', 'HomeController');
-    // default layou
+    // default layout
     define('DEFAULT_LAYOUT', 'default');
     define('SITE_TITLE', 'Image Gallery');
 

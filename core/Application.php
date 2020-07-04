@@ -1,6 +1,5 @@
 <?php
 
-// klasa koju ce nasljediti controlleri
 
 class Application
 {
@@ -11,8 +10,8 @@ class Application
         $this->_set_reporting();
     }
 
-    //postavljamo error reporting, u config.php definiramo konstantu DEBUG cija je vrijednost boolean,
-    // te pomocu nje kontroliramo error reporting ovisno jesmo li u developmentu ili live
+
+    //class where we set error reporting (dependant on DEBUG constant in config setting)
     private function _set_reporting()
     {
         if (DEBUG) {

@@ -14,14 +14,12 @@ class User extends Model
         $sql = "INSERT INTO user (username, email, password, city, street) VALUES (:username, :email, :password, :city, :street)";
         $stmt = $this->db->prepare($sql);
 
-        //Bind our variables.
         $stmt->bindValue(':username', $username);
         $stmt->bindValue(':email', $email);
         $stmt->bindValue(':password', $passwordHash);
         $stmt->bindValue(':city', $city);
         $stmt->bindValue(':street', $street);
 
-        //Execute the statement and insert the new account.
         return $stmt->execute();
     }
 

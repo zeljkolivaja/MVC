@@ -3,18 +3,11 @@
 class SessionController extends Controller
 {
 
-
-    // I like this approach. The only thing I did differently was, rather than relying solely on 
-    // $_SESSION['userid'], I also set a $_SESSION['selector'] to check against auth_tokens. 
-    // This way I'm able to invalidate any active sessions (e.g. in the case of a password reset) 
-    // without having to wait for the PHP session to expire. 
-
-
     private static $_instance = null;
 
     private function __construct()
     {
-        # code...
+      
     }
 
 
