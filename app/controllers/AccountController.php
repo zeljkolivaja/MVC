@@ -79,7 +79,8 @@ class AccountController extends Controller
             ROUTER::redirect("home/index");
             exit;
         } else {
-            $token = new TokenController;
+            // $token = new TokenController;
+            $token = new Token;
             $token->create($user['id']);
             $this->session->setSession($user['id'], $user['username'], $user['email'], $csrf);
             ROUTER::redirect("home/index");

@@ -14,7 +14,7 @@ class HomeController extends Controller
 
     public function index()
     {
-        //  unset($_SESSION['userid']);
+        // unset($_SESSION['userid']);
         $this->view->render('home/index');
     }
 

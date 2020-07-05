@@ -6,8 +6,6 @@ class Controller extends Application{
     public $view;
 
 
-    // kreiramo klasu pomocu koje cemo instancirati nase kontrolere
-
     //class which every controller inherits, it inherits application class where application and php 
     // ini setting are defined, also we check for remember me cookie if user session is empty
     // if there is one and its valid we login the user and generate new token
@@ -18,7 +16,7 @@ class Controller extends Application{
 
         if (empty($_SESSION['userid']) && !empty($_COOKIE['remember'])) {
 
-            $token = new TokenController;
+            $token = new Token;
             $token->regenerate();
  
         }

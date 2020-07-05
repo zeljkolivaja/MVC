@@ -60,7 +60,8 @@ class Token extends Model
             $user = $userModel->read($row[0]['user_id']);
 
             $session = SessionController::getInstance();
-            $session->setSession($row[0]['user_id'], $user['username'], $user['email']);
+            $csrf = base64_encode(openssl_random_pseudo_bytes(32));
+            $session->setSession($row[0]['user_id'], $user['username'], $user['email'], $csrf);
 
             $this->create($row[0]['user_id']);
         }
