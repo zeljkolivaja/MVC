@@ -70,19 +70,18 @@ class AccountController extends Controller
         }
 
 
-        $csrf = base64_encode(openssl_random_pseudo_bytes(32));
 
 
         //we proceed to login the user
         if (empty($_POST["rememberme"])) {
-            $this->session->setSession($user['id'], $user['username'], $email, $csrf);
+            $this->session->setSession($user['id'], $user['username'], $email);
             ROUTER::redirect("home/index");
             exit;
         } else {
             // $token = new TokenController;
             $token = new Token;
             $token->create($user['id']);
-            $this->session->setSession($user['id'], $user['username'], $user['email'], $csrf);
+            $this->session->setSession($user['id'], $user['username'], $user['email']);
             ROUTER::redirect("home/index");
             exit;
         }
@@ -136,8 +135,7 @@ class AccountController extends Controller
         $result = $this->user->create($userData["username"], $userData["email"], $passwordHash, $userData["city"], $userData["street"]);
         $id = $this->user->lastId();
 
-        $csrf = base64_encode(openssl_random_pseudo_bytes(32));
-        $this->session->setSession($id, $userData["username"], $userData["email"], $csrf);
+        $this->session->setSession($id, $userData["username"], $userData["email"]);
 
         if ($result) {
             $this->view->render('home/index');

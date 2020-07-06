@@ -20,8 +20,10 @@ class SessionController extends Controller
         return self::$_instance;
     }
 
-    public function setSession($id, $username, $email, $csrf="")
+    public function setSession($id, $username, $email)
     {
+        $csrf = base64_encode(openssl_random_pseudo_bytes(32));
+
         $_SESSION["username"] = $username;
         $_SESSION['userid'] = $id;
         $_SESSION['email'] = $email;
