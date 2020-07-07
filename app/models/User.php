@@ -67,9 +67,8 @@ class User extends Model
 
     public function checkEmail($email)
     {
-        $db = DB::getInstance();
         $sql = "SELECT COUNT(email) AS num FROM user WHERE email = :email";
-        $stmt = $db->prepare($sql);
+        $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':email', $email);
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);

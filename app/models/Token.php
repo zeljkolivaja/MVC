@@ -15,7 +15,6 @@ class Token extends Model
 
         $token = hash('sha256', $authenticator);
 
-        // $db = DB::getInstance();
         $sql = "INSERT INTO token (selector, token, user_id, expires) VALUES (:selector, :token, :userid, :expires)";
         $stmt = $this->db->prepare($sql);
 

@@ -1,5 +1,4 @@
  <?php $this->start('head'); ?>
- <meta content="test" />
  <?php $this->setSiteTitle("Change password"); ?>
  <?php $this->end(); ?>
 

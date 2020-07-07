@@ -22,7 +22,6 @@ class Image extends Model
     }
 
 
-
     public function read()
     {
         $sql = ("SELECT user.id, 
@@ -68,7 +67,6 @@ class Image extends Model
         foreach ($images as $image) {
         $dirPath = ROOT . DS  . str_replace("/",DS ,$image->path);
         unlink($dirPath);
-         
         }
      }
 

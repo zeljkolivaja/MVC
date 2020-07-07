@@ -10,10 +10,8 @@ class SessionController extends Controller
       
     }
 
-
     public static function getInstance()
     {
-
         if (!isset(self::$_instance)) {
             self::$_instance = new SessionController();
         }
@@ -32,7 +30,6 @@ class SessionController extends Controller
 
     public function checkCsrf($csrf)
     {
-
         if ($_SESSION["csrf"] != $csrf) {
             return false;
         }
@@ -49,7 +46,6 @@ class SessionController extends Controller
         if (!empty($_SESSION['userid'])) {
             return true;
         }
-
         return false;
     }
 }

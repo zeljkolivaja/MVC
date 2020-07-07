@@ -24,6 +24,8 @@ class View
         }
     }
 
+    //content is called from layout, it gets conttent of _head or _body, in those properties we store 
+    // content which we want to display (we save it there using the start/end methods which we call from some view)
     public function content($type)
     {
         if ($type == 'head') {
@@ -35,7 +37,7 @@ class View
         }
     }
 
-
+    //records to buffer and sets the __outputBuffer property to head or body state
     public function start($type)
     {
         // we store the head or body in _outputBuffer
@@ -45,6 +47,8 @@ class View
 
     }
 
+    //checks the currents state of _outputBuffer(set in start method) and saves the generated content using the 
+    //ob_get_clean in body or head property so we can display it in layout 
     public function end()
     {
        if ($this->_outputBuffer == 'head') {
@@ -58,12 +62,14 @@ class View
     }
 
 
-
+    //we use this to set site title in different pages
     public function setSiteTitle($title)
     {
         $this->_siteTitle = $title;
     }
 
+
+    //change the layout (if not set we use the DEFAULT_LAYOUT from config)
     public function setLayout($path)
     {
        $this->_layout = $path;

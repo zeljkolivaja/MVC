@@ -69,16 +69,12 @@ class AccountController extends Controller
             exit;
         }
 
-
-
-
         //we proceed to login the user
         if (empty($_POST["rememberme"])) {
             $this->session->setSession($user['id'], $user['username'], $email);
             ROUTER::redirect("home/index");
             exit;
         } else {
-            // $token = new TokenController;
             $token = new Token;
             $token->create($user['id']);
             $this->session->setSession($user['id'], $user['username'], $user['email']);
@@ -128,10 +124,6 @@ class AccountController extends Controller
         //Hash the password as we do NOT want to store our passwords in plain text.
         $passwordHash = password_hash($password, PASSWORD_BCRYPT);
 
-        //Prepare our INSERT statement.
-
-        // $result = $this->user->create($username, $email, $passwordHash, $city, $street);
-       
         $result = $this->user->create($userData["username"], $userData["email"], $passwordHash, $userData["city"], $userData["street"]);
         $id = $this->user->lastId();
 
