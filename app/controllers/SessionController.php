@@ -7,7 +7,6 @@ class SessionController extends Controller
 
     private function __construct()
     {
-      
     }
 
     public static function getInstance()
@@ -48,4 +47,19 @@ class SessionController extends Controller
         }
         return false;
     }
+
+    public static function forbidIFLoggedOut()
+    {
+        if (!self::loggedIn()) {
+            die("Access denied");
+        }
+    }
+
+    public static function forbidIFLoggedIn()
+    {
+        if (SessionController::loggedIn()) {
+            ROUTER::redirect("home/index");
+        }
+    }
+
 }

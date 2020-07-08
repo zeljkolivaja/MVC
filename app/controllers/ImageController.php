@@ -10,9 +10,8 @@ class ImageController extends Controller
     {
         parent::__construct();
 
-        if (!SessionController::loggedIn()) {
-            die("Access denied");
-        }
+        SessionController::forbidIFLoggedOut();
+
         $this->session = SessionController::getInstance();
 
         $this->image = new Image;

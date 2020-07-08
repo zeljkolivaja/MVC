@@ -14,19 +14,15 @@ class AccountController extends Controller
 
     public function indexLogin($message = NULL, $email = NULL)
     {
-        if (SessionController::loggedIn()) {
-            ROUTER::redirect("home/index");
-        }
 
+        SessionController::forbidIFLoggedIn();
         $this->view->render('account/signin', ["message" => $message , "email" => $email]);
     }
 
     public function indexRegister($message = NULL, $userData = [])
     {
-        if (SessionController::loggedIn()) {
-            ROUTER::redirect("home/index");
-        }
-        
+
+        SessionController::forbidIFLoggedIn();
         $this->view->render('account/signup', ["message" => $message, "userData" => $userData]);
     }
 
@@ -39,12 +35,10 @@ class AccountController extends Controller
         $this->view->render('account/changePassword', ["message" => $message]);
     }
 
+
     public function menage()
     {
-        if (!SessionController::loggedIn()) {
-            die("Access denied");
-        }
-
+        SessionController::forbidIFLoggedOut();
         $this->view->render('account/menage');
     }
 
@@ -93,9 +87,7 @@ class AccountController extends Controller
 
     public function logout()
     {
-        if (!SessionController::loggedIn()) {
-            die("Access denied");
-        }
+        SessionController::forbidIFLoggedOut();
 
         $this->session->destroySession();
 
