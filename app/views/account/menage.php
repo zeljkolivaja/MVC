@@ -6,6 +6,7 @@
 
  <div>
      <h2>Hello <?php e($_SESSION["username"]); ?>. <br /></h2>
+     <hr>
      <h4>Menage your account</h4>
  </div>
  <br>

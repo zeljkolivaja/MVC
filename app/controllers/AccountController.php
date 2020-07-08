@@ -14,11 +14,19 @@ class AccountController extends Controller
 
     public function indexLogin($message = NULL, $email = NULL)
     {
+        if (SessionController::loggedIn()) {
+            ROUTER::redirect("home/index");
+        }
+
         $this->view->render('account/signin', ["message" => $message , "email" => $email]);
     }
 
     public function indexRegister($message = NULL, $userData = [])
     {
+        if (SessionController::loggedIn()) {
+            ROUTER::redirect("home/index");
+        }
+        
         $this->view->render('account/signup', ["message" => $message, "userData" => $userData]);
     }
 
