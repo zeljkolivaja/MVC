@@ -9,6 +9,7 @@
         $getProjectRoot = explode('\\', ROOT);
         define('PROOT', "/" . end($getProjectRoot) . "/");
         define('IMAGEDIR', (str_replace("\\", "/", ROOT)) . "/public/images/");
+        define('ERRORS', (str_replace("\\", "/", ROOT)) . "/tmp/logs/errors.log");
     } elseif ($env === "online") {
         define('PROOT', '/');
         define('IMAGEDIR', '/public/images/');

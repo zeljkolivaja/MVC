@@ -7,7 +7,7 @@ class Image extends Model
         parent::__construct();
     }
 
-    public function insert($imagePath, $imageName)
+    public function insert($imagePath,$imageName)
     {
         $userId = $_SESSION['userid'];
 

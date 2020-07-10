@@ -16,12 +16,14 @@ class Application
     {
         if (DEBUG) {
             error_reporting(E_ALL);
-            ini_set('display_errors', 1);
+            ini_set('display_errors', TRUE);
         } else {
             error_reporting(0);
-            ini_set('display_errors', 0);
-            ini_set('log_errors', 1);
-            ini_set('error_log', ROOT . DS . 'tmp' . DS . 'logs' . DS . 'errors.log');
+            ini_set('display_errors', FALSE);
+            ini_set('log_errors', TRUE);
+            //in xammp erorrs are being written to C\xampp\apache\logs\error.log
+            ini_set('error_log', ERRORS);
+
         }
     }
 }

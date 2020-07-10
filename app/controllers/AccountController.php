@@ -14,14 +14,12 @@ class AccountController extends Controller
 
     public function indexLogin($message = NULL, $email = NULL)
     {
-
         SessionController::forbidIFLoggedIn();
         $this->view->render('account/signin', ["message" => $message , "email" => $email]);
     }
 
     public function indexRegister($message = NULL, $userData = [])
     {
-
         SessionController::forbidIFLoggedIn();
         $this->view->render('account/signup', ["message" => $message, "userData" => $userData]);
     }
@@ -31,7 +29,6 @@ class AccountController extends Controller
         if (!SessionController::loggedIn()) {
             die("Access denied");
         }
-
         $this->view->render('account/changePassword', ["message" => $message]);
     }
 
@@ -44,7 +41,6 @@ class AccountController extends Controller
 
     public function login()
     {
-
         $validation = $this->validateLogin();
         $email = filter_var($_POST["email"], FILTER_SANITIZE_EMAIL);
 
@@ -84,7 +80,6 @@ class AccountController extends Controller
             exit;
         }
     }
-
     public function logout()
     {
         SessionController::forbidIFLoggedOut();
@@ -104,7 +99,6 @@ class AccountController extends Controller
 
     public function register()
     {
-
         $validation = $this->validateRegistration();
 
         $userData =  [
