@@ -42,7 +42,7 @@ class SessionController extends Controller
 
     public static function loggedIn()
     {
-        if (!empty($_SESSION['userid'])) {
+        if(!empty($_SESSION['userid'])) {
             return true;
         }
         return false;

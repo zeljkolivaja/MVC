@@ -48,7 +48,6 @@ class User extends Model
 
     public function read($id)
     {
-
         $sql = "SELECT username, email, password FROM user WHERE id = :id";
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':id', $id);

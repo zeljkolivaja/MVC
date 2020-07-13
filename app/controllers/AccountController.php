@@ -80,6 +80,7 @@ class AccountController extends Controller
             exit;
         }
     }
+    
     public function logout()
     {
         SessionController::forbidIFLoggedOut();
@@ -144,6 +145,7 @@ class AccountController extends Controller
 
     public function updatePassword()
     {
+
         $this->checkCsrfandLogin();
 
         $passwordNew = $_POST["passwordNew"];
@@ -168,6 +170,29 @@ class AccountController extends Controller
             }
         }
     }
+
+    
+    private function checkPasswordMatch($pass1, $pass2)
+    {
+        if ($pass1 != $pass2) {
+            $message = "Your new password doesnt match";
+            $this->indexChangePassword($message);
+            exit;
+        }
+    }
+
+    private function checkCsrfandLogin()
+    {
+        if (
+            SessionController::loggedIn() == false or
+            $_POST["csrf"] == null or
+            $this->session->checkCsrf($_POST["csrf"]) == false
+        ){
+            die("Access denied");
+            exit;
+        }
+    }
+
 
     private function validateLogin()
     {
@@ -249,25 +274,5 @@ class AccountController extends Controller
         return true;
     }
 
-    private function checkPasswordMatch($pass1, $pass2)
-    {
-        if ($pass1 != $pass2) {
-            $message = "Your new password doesnt match";
-            $this->indexChangePassword($message);
-            exit;
-        }
-    }
-
-    private function checkCsrfandLogin()
-    {
-        if (
-            !SessionController::loggedIn() or
-            !isset($_POST["csrf"]) or
-            !$this->session->checkCsrf($_POST["csrf"])
-        ) {
-            die("Access denied");
-            exit;
-        }
-    }
 
 }

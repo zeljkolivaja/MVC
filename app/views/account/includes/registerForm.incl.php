@@ -14,6 +14,8 @@
 <div class="form-group">
     <label for="password">Password</label>
     <input type="password" required class="form-control" name="password" id="exampleInputPassword1">
+    <small id="passwordHelp" class="form-text text-muted">Password must be at least 8 characters long.</small>
+
 </div>
 
 <div class="form-group">
