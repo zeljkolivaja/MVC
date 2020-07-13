@@ -39,6 +39,10 @@ class Router{
     }
      
 
+    // umjesto da manualno instanciramo objekt i definiramo mu akciju i saljemo parametre npr.
+    // $dispatch->$action_name($query_params)
+    //koristimo call_user_func_array metodu
+
     //we check does the wanted method exists in defined controller
     //if nothing found we kill the page
     if ( method_exists($controller, $action) ) {

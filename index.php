@@ -2,6 +2,9 @@
 
 
 //defining constant so the app works in different OS
+
+use test\TestController;
+
 define('DS', DIRECTORY_SEPARATOR);
 
 //root of the project
@@ -35,5 +38,4 @@ $url = isset($_SERVER['PATH_INFO']) ? explode('/', ltrim($_SERVER['PATH_INFO'], 
 
 //sending the $url array to Router class, where the data will be parsed so we can extract 
 //which controller/action/params user wants to load
-
 Router::route($url);

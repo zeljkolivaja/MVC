@@ -2,17 +2,18 @@
 
 
     //change this to "online for live server"
-    $env = "localhost";
+ 
+    define('ENV', 'localhost');
 
-    if ($env === "localhost") {
+    if (ENV === "localhost") {
 
         $getProjectRoot = explode('\\', ROOT);
         define('PROOT', "/" . end($getProjectRoot) . "/");
         define('IMAGEDIR', (str_replace("\\", "/", ROOT)) . "/public/images/");
         define('ERRORS', (str_replace("\\", "/", ROOT)) . "/tmp/logs/errors.log");
-    } elseif ($env === "online") {
+    } elseif (ENV === "online") {
         define('PROOT', '/');
-        define('IMAGEDIR', '/public/images/');
+        define('IMAGEDIR', 'public/images/');
     }
 
     // debug, true for localhost
