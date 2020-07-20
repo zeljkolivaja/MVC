@@ -28,7 +28,7 @@ function autoload($className){
 spl_autoload_register('autoload');
 
 session_start();
- 
+
 // defining array which will get user input after our app url
 $url = isset($_SERVER['PATH_INFO']) ? explode('/', ltrim($_SERVER['PATH_INFO'], '/')) : [];
 //sending the $url array to Router class, where the data will be parsed so we can extract 

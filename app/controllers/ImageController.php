@@ -30,7 +30,7 @@ class ImageController extends Controller
         $this->checkCSRF();
 
         $imageName = $_POST["name"];
-        $this->imageValidation($_FILES["image"],$imageName);
+        $this->imageValidation($_FILES["image"], $imageName);
 
         $fileName = $_FILES["image"]["name"];
         $fileTmpName = $_FILES["image"]["tmp_name"];
@@ -50,7 +50,7 @@ class ImageController extends Controller
         ROUTER::redirect("image");
     }
 
-   
+
     public function delete()
     {
 
@@ -70,10 +70,10 @@ class ImageController extends Controller
     }
 
 
-    private function imageValidation($file,$imageName)
+    private function imageValidation($file, $imageName)
     {
 
-        if($imageName == NULL){
+        if ($imageName == NULL) {
             $message = "You must enter image name";
             $this->index($message);
             exit;
@@ -114,10 +114,12 @@ class ImageController extends Controller
 
     private function checkCSRF()
     {
-        if (!isset($_POST["csrf"]) or !$this->session->checkCsrf($_POST["csrf"])) {
+        if (
+            $_POST["csrf"] == null or
+            $this->session->checkCsrf($_POST["csrf"]) == false
+        ){
             die("Access denied");
             exit;
         }
     }
-
 }

@@ -10,12 +10,11 @@
 
 
 <div class="form-group">
-  <label for="exampleFormControlFile1">Select Image</label>
-  <input type="file" class="form-control-file" name="image" id="exampleFormControlFile1">
+  <label for="image">Select Image</label>
+  <input type="file" class="form-control-file" name="image">
 </div>
 
 
 <button type="submit" class="btn btn-primary">Submit</button>
-<input type="hidden" name="image_id" value="$user->" id="name">
 
 </form>

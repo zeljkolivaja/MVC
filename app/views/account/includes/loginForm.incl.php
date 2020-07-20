@@ -2,7 +2,7 @@
 
 <div class="form-group">
     <label for="email">Email</label>
-    <input type="email" value='<?php e($email) ?? "" ?>' required class="form-control" name="email"  id="email">
+    <input type="email" value='<?php e($email) ?? "" ?>' required class="form-control" name="email" id="email">
 </div>
 
 <div class="form-group">
@@ -11,8 +11,8 @@
 </div>
 
 <div class="form-group form-check">
-    <input type="checkbox" class="form-check-input" name="rememberme" id="exampleCheck1">
-    <label class="form-check-label" for="exampleCheck1">Remember me</label>
+    <input type="checkbox" class="form-check-input" name="rememberme">
+    <label class="form-check-label" for="rememberme">Remember me</label>
 </div>
 
 <button type="submit" class="btn btn-primary">Submit</button>

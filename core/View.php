@@ -11,7 +11,6 @@ class View
 
     public function render($viewName, $data=[])
     {
-
         $viewArry = explode('/', $viewName);
         $viewString = implode(DS, $viewArry);
         extract($data);
@@ -67,7 +66,6 @@ class View
     {
         $this->_siteTitle = $title;
     }
-
 
     //change the layout (if not set we use the DEFAULT_LAYOUT from config)
     public function setLayout($path)

@@ -2,11 +2,9 @@
 
 
     //change this to "online for live server"
- 
     define('ENV', 'localhost');
 
     if (ENV === "localhost") {
-
         $getProjectRoot = explode('\\', ROOT);
         define('PROOT', "/" . end($getProjectRoot) . "/");
         define('IMAGEDIR', (str_replace("\\", "/", ROOT)) . "/public/images/");
