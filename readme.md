@@ -8,7 +8,7 @@ Simple practice PHP MVC app featuring :
   -  custom seeding
   - PDO data-access abstraction layer
   - CSRF protection included
-  - Cross-site scripting protection on output
+  - XSS protection on output
   - autoloading classes
   - custom Routing
   - output buffering user content directly to layout
