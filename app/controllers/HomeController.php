@@ -14,13 +14,13 @@ class HomeController extends Controller
 
     public function index()
     {
-        // unset($_SESSION['userid']);
+        //unset($_SESSION['userid']);
         $this->view->render('home/index');
     }
 
     public function getTotalImages()
     {
         $totalImages = $this->image->getTotalImages();
-        echo json_encode($totalImages) ;
+        echo json_encode($totalImages);
     }
 }

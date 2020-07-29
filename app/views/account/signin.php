@@ -1,6 +1,6 @@
- <?php $this->start('head'); ?>
- <?php $this->setSiteTitle("Login"); ?>
- <?php $this->end(); ?>
+ <?php $this->start('head');?>
+ <?php $this->setSiteTitle("Login");?>
+ <?php $this->end();?>
 
  <?php $this->start('body');?>
 
@@ -9,10 +9,10 @@
  </div>
  <br>
 
-<?php include_once "includes/loginForm.incl.php" ?>
+ <?php include_once "includes/loginForm.incl.php"?>
 
-<br/>
+ <br />
 
-<?php message($message) ?>
+ <?php message($message)?>
 
  <?php $this->end();?>

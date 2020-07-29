@@ -12,26 +12,23 @@ class AccountController extends Controller
         $this->session = SessionController::getInstance();
     }
 
-    public function indexLogin($message = NULL, $email = NULL)
+    public function indexLogin($message = null, $email = null)
     {
         SessionController::forbidIFLoggedIn();
-        $this->view->render('account/signin', ["message" => $message , "email" => $email]);
+        $this->view->render('account/signin', ["message" => $message, "email" => $email]);
     }
 
-    public function indexRegister($message = NULL, $userData = [])
+    public function indexRegister($message = null, $userData = [])
     {
         SessionController::forbidIFLoggedIn();
         $this->view->render('account/signup', ["message" => $message, "userData" => $userData]);
     }
 
-    public function indexChangePassword($message = NULL)
+    public function indexChangePassword($message = null)
     {
-        if (!SessionController::loggedIn()) {
-            die("Access denied");
-        }
+        SessionController::forbidIFLoggedOut();
         $this->view->render('account/changePassword', ["message" => $message]);
     }
-
 
     public function menage()
     {
@@ -44,17 +41,16 @@ class AccountController extends Controller
         $validation = $this->validateLogin();
         $email = filter_var($_POST["email"], FILTER_SANITIZE_EMAIL);
 
-
         if ($validation !== "validated") {
             $this->indexLogin($validation, $email);
             exit;
         }
 
-         $user = $this->user->findWithEmail($email);
+        $user = $this->user->findWithEmail($email);
 
         if ($user === false) {
             $message = "Could not find a user with that email adress!";
-            $this->indexLogin($message,$email);
+            $this->indexLogin($message, $email);
             exit;
         }
 
@@ -63,7 +59,7 @@ class AccountController extends Controller
         if (!$validPassword) {
             //$validPassword was FALSE. Passwords do not match.
             $message = "Password incorrect!";
-            $this->indexLogin($message,$email);
+            $this->indexLogin($message, $email);
             exit;
         }
 
@@ -80,7 +76,7 @@ class AccountController extends Controller
             exit;
         }
     }
-    
+
     public function logout()
     {
         SessionController::forbidIFLoggedOut();
@@ -102,11 +98,11 @@ class AccountController extends Controller
     {
         $validation = $this->validateRegistration();
 
-        $userData =  [
-            "username" => trim( preg_replace('/\s+/', ' ', $_POST["username"])),
+        $userData = [
+            "username" => trim(preg_replace('/\s+/', ' ', $_POST["username"])),
             "email" => $_POST["email"],
-            "city" => trim( preg_replace('/\s+/', ' ', $_POST["city"])),
-            "street"=> trim( preg_replace('/\s+/', ' ', $_POST["street"]))
+            "city" => trim(preg_replace('/\s+/', ' ', $_POST["city"])),
+            "street" => trim(preg_replace('/\s+/', ' ', $_POST["street"])),
         ];
 
         if ($validation !== "validated") {
@@ -115,7 +111,7 @@ class AccountController extends Controller
         }
 
         $password = $_POST["password"];
-  
+
         //Hash the password as we do NOT want to store our passwords in plain text.
         $passwordHash = password_hash($password, PASSWORD_BCRYPT);
 
@@ -129,7 +125,6 @@ class AccountController extends Controller
         }
     }
 
-
     public function delete()
     {
         $this->checkCsrfandLogin();
@@ -138,7 +133,7 @@ class AccountController extends Controller
         $imageModel = new Image;
         $imageModel->bulkDeleteImages($id);
 
-        //deletes the user from the DB and deletes all his images 
+        //deletes the user from the DB and deletes all his images
         $this->user->delete($id);
         $this->logout();
     }
@@ -171,7 +166,6 @@ class AccountController extends Controller
         }
     }
 
-    
     private function checkPasswordMatch($pass1, $pass2)
     {
         if ($pass1 != $pass2) {
@@ -187,12 +181,11 @@ class AccountController extends Controller
             SessionController::loggedIn() == false or
             $_POST["csrf"] == null or
             $this->session->checkCsrf($_POST["csrf"]) == false
-        ){
+        ) {
             die("Access denied");
             exit;
         }
     }
-
 
     private function validateLogin()
     {
@@ -218,12 +211,12 @@ class AccountController extends Controller
     private function validateRegistration()
     {
 
-        if ($_POST["username"] == NULL) {
+        if ($_POST["username"] == null) {
             $message = "You must enter username";
             return $message;
         }
 
-        if ($_POST["email"] == NULL) {
+        if ($_POST["email"] == null) {
             $message = "You must enter email";
             return $message;
         }
@@ -233,7 +226,7 @@ class AccountController extends Controller
             return $message;
         }
 
-        if ($_POST["password"] == NULL) {
+        if ($_POST["password"] == null) {
             $message = "You must enter password";
             return $message;
         }
@@ -251,7 +244,6 @@ class AccountController extends Controller
         }
 
         $email = $_POST["email"];
-
 
         if (!$this->user->checkEmail($email)) {
             $message = "Email already registered";
@@ -273,6 +265,4 @@ class AccountController extends Controller
 
         return true;
     }
-
-
 }

@@ -84,8 +84,8 @@ class ImageController extends Controller
         $fileError = $file["error"];
 
         $size = getimagesize($fileTmpName);
-        if (!$size) {
 
+        if (!$size) {
             $message = "File type error";
             $this->index($message);
             exit;
@@ -105,7 +105,7 @@ class ImageController extends Controller
             exit;
         }
 
-        if ($fileSize > 5097152) {
+        if ($fileSize > 5000000) {
             $message = "file to big";
             $this->index($message);
             exit;
