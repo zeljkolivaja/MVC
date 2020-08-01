@@ -7,7 +7,6 @@ RewriteCond $1 !^(config|core|css|public|js|tmp|fonts|robots\.txt)
 RewriteRule ^(.*)$ ./index.php/$1 [L]
 
 
-
 # Sve sto dodje kroz request a nije direktorij ili file 
 # ili se ne nalazi u config|core|css|js|fonts|robots\.txt direktorijima
 # preusmjerava se na index.php file

@@ -5,7 +5,6 @@ class ImageController extends Controller
     private $image;
     private $session;
 
-
     public function __construct()
     {
         parent::__construct();
@@ -17,7 +16,7 @@ class ImageController extends Controller
         $this->image = new Image;
     }
 
-    public function index($message = NULL)
+    public function index($message = null)
     {
 
         $images = $this->image->read();
@@ -50,7 +49,6 @@ class ImageController extends Controller
         ROUTER::redirect("image");
     }
 
-
     public function delete()
     {
 
@@ -69,11 +67,10 @@ class ImageController extends Controller
         ROUTER::redirect("image");
     }
 
-
     private function imageValidation($file, $imageName)
     {
 
-        if ($imageName == NULL) {
+        if ($imageName == null) {
             $message = "You must enter image name";
             $this->index($message);
             exit;
@@ -93,7 +90,7 @@ class ImageController extends Controller
 
         $valid_types = array(IMAGETYPE_JPEG, IMAGETYPE_PNG);
 
-        if (!in_array($size[2],  $valid_types)) {
+        if (!in_array($size[2], $valid_types)) {
             $message = "Image must be JPEG or PNG";
             $this->index($message);
             exit;
@@ -117,9 +114,9 @@ class ImageController extends Controller
         if (
             $_POST["csrf"] == null or
             $this->session->checkCsrf($_POST["csrf"]) == false
-        ){
-            die("Access denied");
-            exit;
+        ) {
+            $error = new ErrorController;
+            $error->forbidden();
         }
     }
 }

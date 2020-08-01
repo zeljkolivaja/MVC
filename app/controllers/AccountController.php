@@ -181,8 +181,8 @@ class AccountController extends Controller
             $_POST["csrf"] == null or
             $this->session->checkCsrf($_POST["csrf"]) == false
         ) {
-            die("Access denied");
-            exit;
+            $error = new ErrorController;
+            $error->forbidden();
         }
     }
 

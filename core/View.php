@@ -9,21 +9,22 @@ class View
     {
     }
 
-    public function render($viewName, $data=[])
+    public function render($viewName, $data = [])
     {
         $viewArry = explode('/', $viewName);
         $viewString = implode(DS, $viewArry);
         extract($data);
 
-         if (file_exists(ROOT . DS . 'app' . DS . 'views' . DS . $viewString . '.php')) {
-            include(ROOT . DS . 'app' . DS . 'views' . DS . $viewString . '.php');
-            include(ROOT . DS . 'app' . DS . 'views' . DS . 'layouts' . DS . $this->_layout . '.php');
+        if (file_exists(ROOT . DS . 'app' . DS . 'views' . DS . $viewString . '.php')) {
+            include ROOT . DS . 'app' . DS . 'views' . DS . $viewString . '.php';
+            include ROOT . DS . 'app' . DS . 'views' . DS . 'layouts' . DS . $this->_layout . '.php';
         } else {
-            die('The view ' . $viewName . 'does not exist');
+            $error = new ErrorController;
+            $error->pageNotFound($viewName);
         }
     }
 
-    //content is called from layout, it gets conttent of _head or _body, in those properties we store 
+    //content is called from layout, it gets conttent of _head or _body, in those properties we store
     // content which we want to display (we save it there using the start/end methods which we call from some view)
     public function content($type)
     {
@@ -46,20 +47,19 @@ class View
 
     }
 
-    //checks the currents state of _outputBuffer(set in start method) and saves the generated content using the 
-    //ob_get_clean in body or head property so we can display it in layout 
+    //checks the currents state of _outputBuffer(set in start method) and saves the generated content using the
+    //ob_get_clean in body or head property so we can display it in layout
     public function end()
     {
-       if ($this->_outputBuffer == 'head') {
-           $this->_head = ob_get_clean();
-       }elseif ($this->_outputBuffer == 'body') {
-        $this->_body = ob_get_clean();
+        if ($this->_outputBuffer == 'head') {
+            $this->_head = ob_get_clean();
+        } elseif ($this->_outputBuffer == 'body') {
+            $this->_body = ob_get_clean();
 
-       }else {
-           die('You must first run start function');
-       }
+        } else {
+            die('You must first run start function');
+        }
     }
-
 
     //we use this to set site title in different pages
     public function setSiteTitle($title)
@@ -70,6 +70,6 @@ class View
     //change the layout (if not set we use the DEFAULT_LAYOUT from config)
     public function setLayout($path)
     {
-       $this->_layout = $path;
+        $this->_layout = $path;
     }
 }

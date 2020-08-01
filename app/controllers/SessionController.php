@@ -51,7 +51,8 @@ class SessionController extends Controller
     public static function forbidIFLoggedOut()
     {
         if (!self::loggedIn()) {
-            die("Access denied");
+            $error = new ErrorController;
+            $error->forbidden();
         }
     }
 
