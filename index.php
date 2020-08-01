@@ -8,6 +8,7 @@ define('DS', DIRECTORY_SEPARATOR);
 define('ROOT', dirname(__FILE__));
 
 require_once ROOT . DS . 'config' . DS . 'config.php';
+require_once ROOT . DS . 'config' . DS . 'siteSettings.php';
 require_once ROOT . DS . 'app' . DS . 'lib' . DS . 'helpers' . DS . 'functions.php';
 
 //defining where will the spl_autoload_register look for classes to instantiate

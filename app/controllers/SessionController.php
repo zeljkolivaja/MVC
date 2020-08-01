@@ -59,4 +59,16 @@ class SessionController extends Controller
         }
     }
 
+    public function checkCsrfandLogin()
+    {
+        if (
+            self::loggedIn() == false or
+            $_POST["csrf"] == null or
+            $this->checkCsrf($_POST["csrf"]) == false
+        ) {
+            $error = new ErrorController;
+            $error->forbidden();
+        }
+    }
+
 }

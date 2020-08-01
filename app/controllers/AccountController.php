@@ -38,8 +38,9 @@ class AccountController extends Controller
 
     public function login()
     {
-        $validation = $this->validateLogin();
+        // $validation = $this->validateLogin();
         $email = filter_var($_POST["email"], FILTER_SANITIZE_EMAIL);
+        $validation = $this->user->validateLogin();
 
         if ($validation !== true) {
             $this->indexLogin($validation, $email);
@@ -80,29 +81,15 @@ class AccountController extends Controller
     public function logout()
     {
         SessionController::forbidIFLoggedOut();
-
         $this->session->destroySession();
-
-        setcookie(
-            'remember',
-            '',
-            time() - 42000,
-            '/'
-        );
-
+        setcookie('remember', '', time() - 42000, '/');
         ROUTER::redirect("home/index");
     }
 
     public function register()
     {
-        $validation = $this->validateRegistration();
-
-        $userData = [
-            "username" => trim(preg_replace('/\s+/', ' ', $_POST["username"])),
-            "email" => $_POST["email"],
-            "city" => trim(preg_replace('/\s+/', ' ', $_POST["city"])),
-            "street" => trim(preg_replace('/\s+/', ' ', $_POST["street"])),
-        ];
+        $validation = $this->user->validateRegistration();
+        $userData = $this->user->formatData();
 
         if ($validation !== true) {
             $this->indexRegister($validation, $userData);
@@ -110,13 +97,10 @@ class AccountController extends Controller
         }
 
         $password = $_POST["password"];
-
         //Hash the password as we do NOT want to store our passwords in plain text.
         $passwordHash = password_hash($password, PASSWORD_BCRYPT);
-
         $result = $this->user->create($userData["username"], $userData["email"], $passwordHash, $userData["city"], $userData["street"]);
         $id = $this->user->lastId();
-
         $this->session->setSession($id, $userData["username"], $userData["email"]);
 
         if ($result) {
@@ -126,12 +110,11 @@ class AccountController extends Controller
 
     public function delete()
     {
-        $this->checkCsrfandLogin();
+        $this->session->checkCsrfandLogin();
         $id = $_POST["id"];
         //gets the all user images stored on hard drive
         $imageModel = new Image;
         $imageModel->bulkDeleteImages($id);
-
         //deletes the user from the DB and deletes all his images
         $this->user->delete($id);
         $this->logout();
@@ -140,128 +123,33 @@ class AccountController extends Controller
     public function updatePassword()
     {
 
-        $this->checkCsrfandLogin();
-
+        $this->session->checkCsrfandLogin();
         $passwordNew = $_POST["passwordNew"];
         $passwordNew2 = $_POST["passwordNew2"];
         $passwordOld = $_POST["passwordOld"];
-
         $id = $_SESSION["userid"];
-
         $user = $this->user->read($id);
         $realPassword = $user['password'];
 
-        $this->checkPasswordMatch($passwordNew, $passwordNew2);
-        $validation = $this->validateUpdatePassword($passwordOld, $realPassword);
+        if ($passwordNew != $passwordNew2) {
+            $this->indexChangePassword("Your new password does not match");
+            exit;
+        }
 
+        $validation = $this->user->validateUpdatePassword($passwordOld, $realPassword);
         if ($validation) {
             //Hash the password as we do NOT want to store our passwords in plain text.
             $passwordHash = password_hash($passwordNew, PASSWORD_BCRYPT);
             $result = $this->user->update($passwordHash, $id);
-            //If the signup process is successful.
-            if ($result) {
-                $this->logout();
-            }
-        }
-    }
-
-    private function checkPasswordMatch($pass1, $pass2)
-    {
-        if ($pass1 != $pass2) {
-            $message = "Your new password doesnt match";
-            $this->indexChangePassword($message);
-            exit;
-        }
-    }
-
-    private function checkCsrfandLogin()
-    {
-        if (
-            SessionController::loggedIn() == false or
-            $_POST["csrf"] == null or
-            $this->session->checkCsrf($_POST["csrf"]) == false
-        ) {
-            $error = new ErrorController;
-            $error->forbidden();
-        }
-    }
-
-    private function validateLogin()
-    {
-
-        if ($_POST['email'] == null) {
-            $message = "You must enter email";
-            return $message;
-        }
-
-        if (!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
-            $message = "Invalid email format";
-            return $message;
-        }
-
-        if ($_POST['password'] == null or strlen($_POST['password']) < 8) {
-            $message = "Password must be at least 8 characters long";
-            return $message;
-        }
-
-        return true;
-    }
-
-    private function validateRegistration()
-    {
-
-        if ($_POST["username"] == null) {
-            $message = "You must enter username";
-            return $message;
-        }
-
-        if ($_POST["email"] == null) {
-            $message = "You must enter email";
-            return $message;
-        }
-
-        if (!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
-            $message = "Invalid email format";
-            return $message;
-        }
-
-        if ($_POST["password"] == null) {
-            $message = "You must enter password";
-            return $message;
-        }
-
-        $passLenght = $_POST["password"];
-
-        if (strlen($passLenght) < 8) {
-            $message = "Password must be at least 8 characters long";
-            return $message;
-        }
-
-        if ($_POST["password"] != $_POST["password2"]) {
-            $message = "Your password doesnt match";
-            return $message;
-        }
-
-        $email = $_POST["email"];
-
-        if (!$this->user->checkEmail($email)) {
-            $message = "Email already registered";
-            return $message;
-        }
-
-        return true;
-    }
-
-    private function validateUpdatePassword($passwordOld, $realPassword)
-    {
-
-        $validPassword = password_verify($passwordOld, $realPassword);
-        if (!$validPassword) {
-            $message = "Your old password is incorrect";
-            $this->indexChangePassword($message);
+        } else {
+            $this->indexChangePassword("Your old password is incorrect");
             exit;
         }
 
-        return true;
+        if ($result) {
+            $this->logout();
+        }
+
     }
+
 }

@@ -8,7 +8,6 @@ class User extends Model
         parent::__construct();
     }
 
-
     public function create($username, $email, $passwordHash, $city, $street)
     {
         $sql = "INSERT INTO user (username, email, password, city, street) VALUES (:username, :email, :password, :city, :street)";
@@ -22,7 +21,6 @@ class User extends Model
 
         return $stmt->execute();
     }
-
 
     public function update($passwordHash, $id)
     {
@@ -38,7 +36,6 @@ class User extends Model
         $stmt->bindValue(':id', $id);
         $stmt->execute();
     }
-
 
     public function lastId()
     {
@@ -78,4 +75,91 @@ class User extends Model
 
         return "true";
     }
+
+    public function validateLogin()
+    {
+        if ($_POST['email'] == null) {
+            $message = "You must enter email";
+            return $message;
+        }
+
+        if (!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
+            $message = "Invalid email format";
+            return $message;
+        }
+
+        if ($_POST['password'] == null or strlen($_POST['password']) < 8) {
+            $message = "Password must be at least 8 characters long";
+            return $message;
+        }
+
+        return true;
+    }
+
+    public function validateRegistration()
+    {
+
+        if ($_POST["username"] == null) {
+            $message = "You must enter username";
+            return $message;
+        }
+
+        if ($_POST["email"] == null) {
+            $message = "You must enter email";
+            return $message;
+        }
+
+        if (!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
+            $message = "Invalid email format";
+            return $message;
+        }
+
+        if ($_POST["password"] == null) {
+            $message = "You must enter password";
+            return $message;
+        }
+
+        $passLenght = $_POST["password"];
+
+        if (strlen($passLenght) < 8) {
+            $message = "Password must be at least 8 characters long";
+            return $message;
+        }
+
+        if ($_POST["password"] != $_POST["password2"]) {
+            $message = "Your password doesnt match";
+            return $message;
+        }
+
+        $email = $_POST["email"];
+
+        if (!$this->checkEmail($email)) {
+            $message = "Email already registered";
+            return $message;
+        }
+
+        return true;
+    }
+
+    public function validateUpdatePassword($passwordOld, $realPassword)
+    {
+
+        if (password_verify($passwordOld, $realPassword)) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    public function formatData()
+    {
+        return [
+            "username" => trim(preg_replace('/\s+/', ' ', $_POST["username"])),
+            "email" => $_POST["email"],
+            "city" => trim(preg_replace('/\s+/', ' ', $_POST["city"])),
+            "street" => trim(preg_replace('/\s+/', ' ', $_POST["street"])),
+        ];
+    }
+
 }
