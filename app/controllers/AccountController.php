@@ -90,7 +90,6 @@ class AccountController extends Controller
             '/'
         );
 
-        // $this->indexLogin($message);
         ROUTER::redirect("home/index");
     }
 
@@ -129,7 +128,7 @@ class AccountController extends Controller
     {
         $this->checkCsrfandLogin();
         $id = $_POST["id"];
-        //gets the all user images store on hard drive
+        //gets the all user images stored on hard drive
         $imageModel = new Image;
         $imageModel->bulkDeleteImages($id);
 
