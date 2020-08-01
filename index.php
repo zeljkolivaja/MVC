@@ -7,23 +7,11 @@ define('DS', DIRECTORY_SEPARATOR);
 // C:\xampp\htdocs\MVC\index.php
 define('ROOT', dirname(__FILE__));
 
-// including config.php and functions.php
 require_once ROOT . DS . 'config' . DS . 'config.php';
 require_once ROOT . DS . 'app' . DS . 'lib' . DS . 'helpers' . DS . 'functions.php';
 
 //defining where will the spl_autoload_register look for classes to instantiate
-function autoload($className)
-{
-    if (file_exists(ROOT . DS . 'core' . DS . $className . '.php')) {
-        require_once ROOT . DS . 'core' . DS . $className . '.php';
-    } else if (file_exists(ROOT . DS . 'app' . DS . 'controllers' . DS . $className . '.php')) {
-        require_once ROOT . DS . 'app' . DS . 'controllers' . DS . $className . '.php';
-    } else if (file_exists(ROOT . DS . 'app' . DS . 'models' . DS . $className . '.php')) {
-        require_once ROOT . DS . 'app' . DS . 'models' . DS . $className . '.php';
-    }
-}
-
-spl_autoload_register('autoload');
+require_once ROOT . DS . 'core' . DS . 'Autoload.php';
 
 session_start();
 
