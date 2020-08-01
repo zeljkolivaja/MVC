@@ -41,7 +41,7 @@ class AccountController extends Controller
         $validation = $this->validateLogin();
         $email = filter_var($_POST["email"], FILTER_SANITIZE_EMAIL);
 
-        if ($validation !== "validated") {
+        if ($validation !== true) {
             $this->indexLogin($validation, $email);
             exit;
         }
@@ -104,7 +104,7 @@ class AccountController extends Controller
             "street" => trim(preg_replace('/\s+/', ' ', $_POST["street"])),
         ];
 
-        if ($validation !== "validated") {
+        if ($validation !== true) {
             $this->indexRegister($validation, $userData);
             exit;
         }
@@ -204,7 +204,7 @@ class AccountController extends Controller
             return $message;
         }
 
-        return "validated";
+        return true;
     }
 
     private function validateRegistration()
@@ -249,7 +249,7 @@ class AccountController extends Controller
             return $message;
         }
 
-        return "validated";
+        return true;
     }
 
     private function validateUpdatePassword($passwordOld, $realPassword)
