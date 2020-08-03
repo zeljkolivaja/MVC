@@ -45,7 +45,7 @@ class LoginController extends AccountController
         } else {
             $token = new Token;
             $token->create($user['id']);
-            $this->session->setSession($user['id'], $user['username'], $user['email']);
+            $this->session->setSession($user['id'], $user['username'], $email);
             ROUTER::redirect("home/index");
             exit;
         }

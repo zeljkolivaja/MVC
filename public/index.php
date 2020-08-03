@@ -5,7 +5,7 @@ define('DS', DIRECTORY_SEPARATOR);
 
 //root of the project
 // C:\xampp\htdocs\MVC\index.php
-define('ROOT', dirname(__FILE__));
+define('ROOT', dirname(__FILE__, 2));
 
 require_once ROOT . DS . 'config' . DS . 'config.php';
 require_once ROOT . DS . 'config' . DS . 'siteSettings.php';
@@ -21,4 +21,5 @@ $url = isset($_SERVER['PATH_INFO']) ? explode('/', ltrim($_SERVER['PATH_INFO'], 
 
 //sending the $url array to Router class, where the data will be parsed so we can extract
 //which controller/action/params user wants to load
+array_shift($url);
 Router::route($url);

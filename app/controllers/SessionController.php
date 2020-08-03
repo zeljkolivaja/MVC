@@ -5,6 +5,10 @@ class SessionController extends Controller
 
     private static $_instance = null;
 
+    private function __construct()
+    {
+    }
+
     public static function getInstance()
     {
         if (!isset(self::$_instance)) {

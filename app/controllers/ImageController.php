@@ -41,7 +41,8 @@ class ImageController extends Controller
         //store images to hard drive
         move_uploaded_file($fileTmpName, $fileDestination);
 
-        $path = "public/images/" . $fileNameNew;
+        // $path = "public/images/" . $fileNameNew;
+        $path = "/images/" . $fileNameNew;
 
         //insert image into database
         $this->image->insert($path, $imageName);
