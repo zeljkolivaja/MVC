@@ -3,7 +3,7 @@
 class ErrorController extends Controller
 {
 
-    public function __construct($message = null)
+    public function __construct()
     {
         parent::__construct();
 
