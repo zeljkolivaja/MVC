@@ -4,8 +4,8 @@ Made by following [Inchoo Starter Kit][Inch]
 
 Simple practice PHP MVC app featuring :
   - user registration, login, login with remember me cookie, logout, change password, delete user functionality
-  -  image gallery, upload and delete your images (only png and jpg), view other users images
-  -  custom seeding
+  - image gallery, upload and delete your images (only png and jpg), view other users images
+  - custom seeding
   - PDO data-access abstraction layer
   - CSRF protection included
   - XSS protection on output
