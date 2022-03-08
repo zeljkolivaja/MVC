@@ -1,5 +1,4 @@
 # MVC Image Gallery
-[Live version](http://phpstack-372184-1346022.cloudwaysapps.com/)
 Made by following [Inchoo Starter Kit][Inch]
 
 Simple practice PHP MVC app featuring :
