@@ -1,5 +1,5 @@
 # MVC Image Gallery
-Made by following [Inchoo Starter Kit][Inch]
+Made by following [Inchoo Starter Kit][Inch] - 
 Visit the project [MVC][MVCF]
 
 Simple practice PHP MVC app featuring :
