@@ -1,6 +1,5 @@
 # MVC Image Gallery
 Made by following [Inchoo Starter Kit][Inch] - 
-Visit the project [MVC][MVCF]
 
 Simple practice PHP MVC app featuring :
   - user registration, login, login with remember me cookie, logout, change password, delete user functionality
@@ -26,4 +25,3 @@ Simple practice PHP MVC app featuring :
 ```
 
  [Inch]: <https://inchoo.hr/php-vodic/>
- [MVCF]: <http://phpstack-372184-1346022.cloudwaysapps.com/>
