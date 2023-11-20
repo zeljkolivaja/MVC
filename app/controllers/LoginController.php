@@ -12,7 +12,7 @@ class LoginController extends AccountController
     {
         $this->session->checkCsrf($_POST["csrf"]);
         $email = filter_var($_POST["email"], FILTER_SANITIZE_EMAIL);
-        $validation = $this->user->validateLogin();
+        $validation = $this->validateUser->validateLogin();
 
         if ($validation !== true) {
             $this->indexLogin($validation, $email);

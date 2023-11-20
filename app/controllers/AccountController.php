@@ -4,11 +4,13 @@ class AccountController extends Controller
 {
     protected $user;
     protected $session;
+    protected $validateUser;
 
     public function __construct()
     {
         parent::__construct();
         $this->user = new User;
+        $this->validateUser = new AccountValidationController;
         $this->session = SessionController::getInstance();
     }
 
