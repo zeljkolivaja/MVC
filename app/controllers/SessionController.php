@@ -17,14 +17,16 @@ class SessionController extends Controller
         return self::$_instance;
     }
 
+    public static function generateCSRF()
+    {
+        $_SESSION['csrf'] = base64_encode(openssl_random_pseudo_bytes(32));
+    }
+
     public function setSession($id, $username, $email)
     {
-        $csrf = base64_encode(openssl_random_pseudo_bytes(32));
-
         $_SESSION["username"] = $username;
         $_SESSION['userid'] = $id;
         $_SESSION['email'] = $email;
-        $_SESSION['csrf'] = $csrf;
     }
 
     public function checkCsrf($csrf)
@@ -74,5 +76,4 @@ class SessionController extends Controller
             $error->forbidden();
         }
     }
-
 }

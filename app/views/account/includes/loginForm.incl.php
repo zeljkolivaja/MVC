@@ -1,8 +1,8 @@
-<form action="<?=PROOT?>login/login" method="POST">
+<form action="<?= PROOT ?>login/login" method="POST">
 
     <div class="form-group">
         <label for="email">Email</label>
-        <input type="email" value='<?php e($email) ?? ""?>' required class="form-control" name="email" id="email">
+        <input type="email" value='<?php e($email) ?? "" ?>' required class="form-control" name="email" id="email">
     </div>
 
     <div class="form-group">
@@ -14,6 +14,8 @@
         <input type="checkbox" class="form-check-input" name="rememberme">
         <label class="form-check-label" for="rememberme">Remember me</label>
     </div>
+
+    <input type="hidden" name="csrf" value="<?= $_SESSION['csrf'] ?>">
 
     <button type="submit" class="btn btn-primary">Submit</button>
 

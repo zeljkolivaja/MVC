@@ -15,6 +15,7 @@ class AccountController extends Controller
     public function indexLogin($message = null, $email = null)
     {
         SessionController::forbidIFLoggedIn();
+        SessionController::generateCSRF();
         $this->view->render('account/signin', ["message" => $message, "email" => $email]);
     }
 
@@ -35,5 +36,4 @@ class AccountController extends Controller
         SessionController::forbidIFLoggedOut();
         $this->view->render('account/menage');
     }
-
 }

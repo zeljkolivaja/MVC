@@ -6,12 +6,11 @@ class LoginController extends AccountController
     public function __construct()
     {
         parent::__construct();
-
     }
 
     public function login()
     {
-        // $validation = $this->validateLogin();
+        $this->session->checkCsrf($_POST["csrf"]);
         $email = filter_var($_POST["email"], FILTER_SANITIZE_EMAIL);
         $validation = $this->user->validateLogin();
 
@@ -50,5 +49,4 @@ class LoginController extends AccountController
             exit;
         }
     }
-
 }
