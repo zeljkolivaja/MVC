@@ -21,5 +21,9 @@ $url = isset($_SERVER['PATH_INFO']) ? explode('/', ltrim($_SERVER['PATH_INFO'], 
 
 //sending the $url array to Router class, where the data will be parsed so we can extract
 //which controller/action/params user wants to load
-array_shift($url);
+
+if (ENV !== 'localhost') {
+    array_shift($url);
+};
+
 Router::route($url);

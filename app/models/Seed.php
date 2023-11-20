@@ -16,15 +16,17 @@ class Seed extends Model
                 $tables[] = $value;
             }
         }
- 
-        if (in_array("user", $tables) && in_array("token", $tables)
-           && in_array("image", $tables)) {
+
+        if (
+            in_array("user", $tables) && in_array("token", $tables)
+            && in_array("image", $tables)
+        ) {
             return false;
         }
 
         try {
             if (!in_array("user", $tables)) {
-    
+
                 $sql = "CREATE TABLE `user` (
                     `id` int(11) UNSIGNED NOT NULL primary key auto_increment,
                     `username` varchar(255) NOT NULL,
@@ -35,9 +37,9 @@ class Seed extends Model
                   )";
                 $stmt = $this->db->prepare($sql);
                 $stmt->execute();
-    
-                $password = password_hash("test", PASSWORD_BCRYPT);
-    
+
+                $password = password_hash("12345678", PASSWORD_BCRYPT);
+
                 $sql = "INSERT INTO user (username, email, password, city, street) VALUES (:username, :email, :password, :city, :street)";
                 $stmt = $this->db->prepare($sql);
                 $stmt->bindValue(':username', "Test");
@@ -47,9 +49,9 @@ class Seed extends Model
                 $stmt->bindValue(':street', "Osjecka 21");
                 $stmt->execute();
             }
-    
+
             if (!in_array("token", $tables)) {
-    
+
                 $sql = "CREATE TABLE `token` (
                     `id` int(11) NOT NULL primary key auto_increment,
                     `selector` char(12) NOT NULL,
@@ -60,9 +62,9 @@ class Seed extends Model
                 $stmt = $this->db->prepare($sql);
                 $stmt->execute();
             }
-    
+
             if (!in_array("image", $tables)) {
-    
+
                 $sql = "CREATE TABLE `image` (
                     `id` int(11) NOT NULL primary key auto_increment,
                     `name` varchar(200) NOT NULL,
@@ -72,32 +74,24 @@ class Seed extends Model
                 $stmt = $this->db->prepare($sql);
                 $stmt->execute();
             }
-    
+
             $sql = "ALTER TABLE `image` 
         ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) 
         ON DELETE CASCADE";
             $stmt = $this->db->prepare($sql);
             $stmt->execute();
-    
+
             $sql = "ALTER TABLE `token`
         ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) 
         ON DELETE CASCADE";
-    
+
             $stmt = $this->db->prepare($sql);
             $stmt->execute();
             return true;
-
-
         } catch (\Throwable $th) {
             die("Something went wrong,
              make sure your database " . DB_NAME . " is empty and try again " . $th);
             exit;
         }
-
-        
     }
-
-    
-
-
 }

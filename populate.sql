@@ -36,7 +36,3 @@ ALTER TABLE `image`
 
 ALTER TABLE `token`
   ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;
-
-
-insert into user (id,username,email,password,city,street) values
-(null, "Zeljko", "zeljaos@gmail.com", 123, "Osijek", "Osjecka"),

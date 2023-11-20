@@ -1,18 +1,21 @@
 <script type="text/javascript">
     function ajaxcall() {
+        const ENV = <?php echo json_encode(defined('ENV') ? ENV : null); ?>;
 
-        var xhr = new XMLHttpRequest();
-        <?php if (ENV === 'localhost') {
-            echo "xhr.open('GET', '/MVC2/home/getTotalImages', true);";
+        if (typeof ENV !== 'undefined') {
+            const xhr = new XMLHttpRequest();
+            const path = ENV === 'localhost' ? '/MVC/home/getTotalImages' : '/home/getTotalImages';
+
+            xhr.open('GET', path, true);
+
+            xhr.onload = function() {
+                const serverResponse = document.getElementById("serverResponse");
+                serverResponse.innerHTML = `The number of images currently in the gallery: ${this.responseText}`;
+            };
+
+            xhr.send();
         } else {
-            echo "xhr.open('GET', '/home/getTotalImages', true);";
-        } ?>
-
-        xhr.onload = function() {
-            const serverResponse = document.getElementById("serverResponse");
-            serverResponse.innerHTML = "The number of images currently in the gallery: " + this.responseText;
-        };
-
-        xhr.send(null);
+            console.error("ENV is not defined in JavaScript.");
+        }
     }
 </script>

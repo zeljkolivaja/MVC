@@ -8,9 +8,13 @@ if (ENV === "localhost") {
     define('PROOT', "/" . end($getProjectRoot) . "/");
     define('IMAGEDIR', (str_replace("\\", "/", ROOT)) . "/public/images/");
     define('ERRORS', (str_replace("\\", "/", ROOT)) . "/tmp/logs/errors.log");
+    define('CSSDIR', "/MVC/css/");
+    define('JSDIR', "/MVC/js/");
 } elseif (ENV === "online") {
     define('PROOT', '/');
     define('IMAGEDIR', 'public/images/');
+    define('CSSDIR', "/css/");
+    define('JSDIR', "/js/");
 }
 
 // debug, true for localhost
