@@ -9,14 +9,14 @@ class ErrorController extends Controller
 
     public function pageNotFound($message)
     {
-        $this->logError("404 - Page Not Found: $message");
+        self::logError("404 - Page Not Found: $message");
         $this->renderError('error/pageNotFound', 404, ["message" => $message]);
         exit();
     }
 
     public function forbidden()
     {
-        $this->logError("403 - Forbidden");
+        self::logError("403 - Forbidden");
         $this->renderError('error/forbidden', 403);
         exit();
     }
@@ -27,10 +27,23 @@ class ErrorController extends Controller
         $this->view->render($view, $data);
     }
 
-    private function logError($message)
+    public static function logError($message)
     {
         $logFile = ROOT . DS . 'var' . DS . 'errors' . DS  . 'error.log';
         $data = date('Y-m-d H:i:s') . ' - ' . $message;
+
+        // Check if the log file exists
+        if (!file_exists($logFile)) {
+            // If not, create the directory if it doesn't exist
+            $logDirectory = dirname($logFile);
+            if (!is_dir($logDirectory)) {
+                mkdir($logDirectory, 0777, true);
+            }
+
+            // Create the log file
+            file_put_contents($logFile, '');
+        }
+
         error_log($data . PHP_EOL, 3, $logFile);
     }
 }
