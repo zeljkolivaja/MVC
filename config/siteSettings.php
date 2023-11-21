@@ -12,7 +12,7 @@ if (ENV === "localhost") {
     define('JSDIR', "/MVC/js/");
 } elseif (ENV === "online") {
     define('PROOT', '/');
-    define('IMAGEDIR', 'public/images/');
+    define('IMAGEDIR', '/images/');
     define('CSSDIR', "/css/");
     define('JSDIR', "/js/");
 }

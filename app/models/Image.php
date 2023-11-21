@@ -7,16 +7,17 @@ class Image extends Model
         parent::__construct();
     }
 
-    public function insert($imagePath, $imageName)
+    public function insert($webPath, $imageName, $filePath)
     {
         $userId = $_SESSION['userid'];
 
-        $sql = "INSERT INTO image (name, path, user_id) VALUES (:name, :path, :user_id)";
+        $sql = "INSERT INTO image (name, path, user_id, file_path) VALUES (:name, :path, :user_id, :file_path)";
         $stmt = $this->db->prepare($sql);
 
         $stmt->bindValue(':name', $imageName);
-        $stmt->bindValue(':path', $imagePath);
+        $stmt->bindValue(':path', $webPath);
         $stmt->bindValue(':user_id', $userId);
+        $stmt->bindValue(':file_path', $filePath);
 
         return $stmt->execute();
     }
@@ -31,7 +32,8 @@ class Image extends Model
         image.id as imageId,
         image.name as imageName,
         image.path,
-        image.user_id as imageUserId
+        image.user_id as imageUserId,
+        image.file_path as dirPath
         FROM user
         INNER JOIN image
         ON user.id = image.user_id");
@@ -43,17 +45,14 @@ class Image extends Model
     public function getTotalImages()
     {
         try {
-
             $sql = "SELECT * FROM image";
             $stmt = $this->db->prepare($sql);
             $stmt->execute();
             $count = $stmt->rowCount();
             return $count;
-
         } catch (\Throwable $th) {
             return $message = "No images found";
         }
-
     }
 
     public function saveImage($imageName)
@@ -68,26 +67,25 @@ class Image extends Model
         //store images to hard drive
         move_uploaded_file($fileTmpName, $fileDestination);
 
-        // $path = "public/images/" . $fileNameNew;
-        $path = "/images/" . $fileNameNew;
 
+        if (ENV === "localhost") {
+            $webPath = PROOT . 'images/' . $fileNameNew;
+        } else {
+            $webPath = "images/" . $fileNameNew;
+        }
         //insert image into database
-        $this->insert($path, $imageName);
-
+        $this->insert($webPath, $imageName, $fileDestination);
     }
 
     public function deleteImage()
     {
         $ImageId = $_POST["imageId"];
         $imageOwnerId = $_POST["imageOwnerId"];
-        $path = "public/" . $_POST["path"];
-
-        $dirPath = ROOT . DS . str_replace("/", DS, $path);
+        $dirPath = $_POST["dirPath"];
 
         if ($_SESSION["userid"] == $imageOwnerId) {
             $this->delete($ImageId, $dirPath);
         }
-
     }
 
     public function bulkDeleteImages($id)
@@ -112,7 +110,6 @@ class Image extends Model
         $stmt->bindValue(':id', $imageId);
         $stmt->execute();
         unlink($path);
-
     }
 
     public function imageValidation($file)
@@ -154,5 +151,4 @@ class Image extends Model
 
         return true;
     }
-
 }

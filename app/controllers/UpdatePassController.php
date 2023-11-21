@@ -27,7 +27,7 @@ class UpdatePassController extends AccountController
             exit;
         }
 
-        $validation = $validation = $this->validateUser->validateUpdatePassword($passwordOld, $realPassword);
+        $validation = $this->validateUser->validateUpdatePassword($passwordOld, $realPassword);
         if ($validation) {
             //Hash the password as we do NOT want to store our passwords in plain text.
             $passwordHash = password_hash($passwordNew, PASSWORD_BCRYPT);

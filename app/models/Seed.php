@@ -69,7 +69,8 @@ class Seed extends Model
                     `id` int(11) NOT NULL primary key auto_increment,
                     `name` varchar(200) NOT NULL,
                     `path` longtext NOT NULL,
-                    `user_id` int(11) UNSIGNED NOT NULL
+                    `user_id` int(11) UNSIGNED NOT NULL,
+                    `file_path` longtext NOT NULL
                   )";
                 $stmt = $this->db->prepare($sql);
                 $stmt->execute();
