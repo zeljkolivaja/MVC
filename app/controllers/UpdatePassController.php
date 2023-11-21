@@ -9,7 +9,6 @@ class UpdatePassController extends AccountController
     {
         parent::__construct();
         $this->logout = new LogoutController;
-
     }
 
     public function updatePassword()
@@ -28,7 +27,7 @@ class UpdatePassController extends AccountController
             exit;
         }
 
-        $validation = $this->user->validateUpdatePassword($passwordOld, $realPassword);
+        $validation = $validation = $this->validateUser->validateUpdatePassword($passwordOld, $realPassword);
         if ($validation) {
             //Hash the password as we do NOT want to store our passwords in plain text.
             $passwordHash = password_hash($passwordNew, PASSWORD_BCRYPT);
@@ -41,7 +40,5 @@ class UpdatePassController extends AccountController
         if ($result) {
             $this->logout->logout();
         }
-
     }
-
 }
