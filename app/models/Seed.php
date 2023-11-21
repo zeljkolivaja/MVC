@@ -89,9 +89,9 @@ class Seed extends Model
             $stmt->execute();
             return true;
         } catch (\Throwable $th) {
-            die("Something went wrong,
-             make sure your database " . DB_NAME . " is empty and try again " . $th);
-            exit;
+            $message = "Something went wrong,
+             make sure your database " . DB_NAME . " is empty and try again " . $th;
+            ErrorController::logError($message);
         }
     }
 }
