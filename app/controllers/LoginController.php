@@ -1,5 +1,9 @@
 <?php
 
+namespace App\Controllers;
+
+use App\Models\Token;
+
 class LoginController extends AccountController
 {
 
@@ -39,13 +43,13 @@ class LoginController extends AccountController
         //we proceed to login the user
         if (empty($_POST["rememberme"])) {
             $this->session->setSession($user['id'], $user['username'], $email);
-            ROUTER::redirect("home/index");
+            \Core\ROUTER::redirect("home/index");
             exit;
         } else {
             $token = new Token;
             $token->create($user['id']);
             $this->session->setSession($user['id'], $user['username'], $email);
-            ROUTER::redirect("home/index");
+            \Core\ROUTER::redirect("home/index");
             exit;
         }
     }

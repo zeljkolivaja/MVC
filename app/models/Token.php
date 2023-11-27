@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Models;
+
 class Token extends Model
 {
 
@@ -48,7 +50,7 @@ class Token extends Model
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':selector', $selector);
         $stmt->execute();
-        $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $row = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
 
         if (hash_equals($row[0]['token'], hash('sha256', base64_decode($authenticator)))) {
@@ -58,8 +60,8 @@ class Token extends Model
             $userModel = new User;
             $user = $userModel->read($row[0]['user_id']);
 
-            $session = SessionController::getInstance();
-            SessionController::generateCSRF();
+            $session = \App\Controllers\SessionController::getInstance();
+            \App\Controllers\SessionController::generateCSRF();
             $session->setSession($row[0]['user_id'], $user['username'], $user['email']);
 
             $this->create($row[0]['user_id']);

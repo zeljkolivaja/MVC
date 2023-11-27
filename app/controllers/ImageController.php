@@ -1,5 +1,11 @@
 <?php
 
+namespace App\Controllers;
+
+use Core\Controller;
+use App\Models\Image;
+
+
 class ImageController extends Controller
 {
     private $image;
@@ -33,14 +39,14 @@ class ImageController extends Controller
 
         $this->image->saveImage($_POST["name"]);
 
-        ROUTER::redirect("image");
+        \Core\ROUTER::redirect("image");
     }
 
     public function delete()
     {
         $this->checkCSRF();
         $this->image->deleteImage();
-        ROUTER::redirect("image");
+        \Core\ROUTER::redirect("image");
     }
 
     private function checkCSRF()

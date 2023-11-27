@@ -1,4 +1,7 @@
 <?php
+
+namespace App\Models;
+
 class Seed extends Model
 {
 
@@ -7,7 +10,7 @@ class Seed extends Model
         $sql = "show Tables";
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
-        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $data = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
 
         $tables = [];
@@ -92,7 +95,7 @@ class Seed extends Model
         } catch (\Throwable $th) {
             $message = "Something went wrong,
              make sure your database " . DB_NAME . " is empty and try again " . $th;
-            ErrorController::logError($message);
+            \App\Controllers\ErrorController::logError($message);
         }
     }
 }

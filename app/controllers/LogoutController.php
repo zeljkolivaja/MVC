@@ -1,12 +1,14 @@
 <?php
 
+namespace App\Controllers;
+
+
 class LogoutController extends AccountController
 {
 
     public function __construct()
     {
         parent::__construct();
-
     }
 
     public function logout()
@@ -14,7 +16,6 @@ class LogoutController extends AccountController
         SessionController::forbidIFLoggedOut();
         $this->session->destroySession();
         setcookie('remember', '', time() - 42000, '/');
-        ROUTER::redirect("home/index");
+        \Core\ROUTER::redirect("home/index");
     }
-
 }

@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Controllers;
+
 class UpdatePassController extends AccountController
 {
 

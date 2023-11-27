@@ -1,5 +1,9 @@
 <?php
 
+namespace App\Controllers;
+
+use App\Models\Image;
+
 class DeleteAccController extends AccountController
 {
     private $logout;
@@ -8,7 +12,6 @@ class DeleteAccController extends AccountController
     {
         parent::__construct();
         $this->logout = new LogoutController;
-
     }
 
     public function delete()
@@ -22,5 +25,4 @@ class DeleteAccController extends AccountController
         $this->user->delete($id);
         $this->logout->logout();
     }
-
 }

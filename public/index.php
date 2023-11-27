@@ -25,4 +25,4 @@ $url = isset($_SERVER['PATH_INFO']) ? explode('/', ltrim($_SERVER['PATH_INFO'], 
 if (ENV !== 'localhost') {
     array_shift($url);
 };
-Router::route($url);
+Core\Router::route($url);

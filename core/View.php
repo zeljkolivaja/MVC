@@ -1,5 +1,9 @@
 <?php
 
+namespace Core;
+
+use App\Controllers\ErrorController;
+
 class View
 {
 
@@ -40,7 +44,6 @@ class View
         $this->_outputBuffer = $type;
 
         ob_start();
-
     }
 
     //checks the currents state of _outputBuffer(set in start method) and saves the generated content using the
@@ -51,7 +54,6 @@ class View
             $this->_head = ob_get_clean();
         } elseif ($this->_outputBuffer == 'body') {
             $this->_body = ob_get_clean();
-
         } else {
             die('You must first run start function');
         }

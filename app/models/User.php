@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Models;
+
 class User extends Model
 {
 
@@ -49,7 +51,7 @@ class User extends Model
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':id', $id);
         $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
 
     public function findWithEmail($email)
@@ -58,7 +60,7 @@ class User extends Model
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':email', $email);
         $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
 
     public function checkEmail($email)
@@ -67,7 +69,7 @@ class User extends Model
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':email', $email);
         $stmt->execute();
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        $row = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         if ($row['num'] > 0) {
             return false;

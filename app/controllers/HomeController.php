@@ -1,5 +1,10 @@
 <?php
 
+namespace App\Controllers;
+
+use Core\Controller;
+use App\Models\Image;
+
 class HomeController extends Controller
 {
 
@@ -14,7 +19,6 @@ class HomeController extends Controller
 
     public function index()
     {
-        //unset($_SESSION['userid']);
         $this->view->render('home/index');
     }
 
@@ -23,5 +27,4 @@ class HomeController extends Controller
         $totalImages = $this->image->getTotalImages();
         echo json_encode($totalImages);
     }
-
 }

@@ -1,5 +1,10 @@
 <?php
 
+namespace Core;
+
+use Core\View;
+use App\Models\Token;
+
 class Controller extends Application
 {
 

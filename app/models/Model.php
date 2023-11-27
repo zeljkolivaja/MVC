@@ -1,5 +1,7 @@
 <?php
 
+namespace app\Models;
+
 class Model
 {
 
@@ -7,6 +9,6 @@ class Model
 
     public function __construct()
     {
-        $this->db = DB::getInstance();
+        $this->db = \Core\DB::getInstance();
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+namespace Core;
 
 class Application
 {
@@ -23,7 +24,6 @@ class Application
             ini_set('log_errors', TRUE);
             //in xammp erorrs are being written to C\xampp\apache\logs\error.log
             ini_set('error_log', ERRORS);
-
         }
     }
 }

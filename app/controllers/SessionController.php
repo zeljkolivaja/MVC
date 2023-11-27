@@ -1,5 +1,9 @@
 <?php
 
+namespace App\Controllers;
+
+use Core\Controller;
+
 class SessionController extends Controller
 {
 
@@ -61,7 +65,7 @@ class SessionController extends Controller
     public static function forbidIFLoggedIn()
     {
         if (SessionController::loggedIn()) {
-            ROUTER::redirect("home/index");
+            \Core\ROUTER::redirect("home/index");
         }
     }
 

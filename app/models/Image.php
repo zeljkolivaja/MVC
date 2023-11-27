@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Models;
+
 class Image extends Model
 {
     public function __construct()

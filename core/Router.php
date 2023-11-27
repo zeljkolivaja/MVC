@@ -1,18 +1,21 @@
 <?php
 
+namespace Core;
+
+use App\Controllers\ErrorController;
+
 class Router
 {
 
     public static function route($url)
     {
-
         //the first string in the $url array will be our controller, we assign it to the $controller variable
         //if the $url[0] is empty we providte it with DEFAULT_CONTROLLER value stored in config
         //then using the array_shift we remove the firts field(controller) from $url array
         if (isset($url[0]) && $url[0] != '') {
-            $controller = ucwords($url[0] . "Controller");
+            $controller = '\app\controllers\\' . ucwords($url[0] . "Controller");
         } else {
-            $controller = DEFAULT_CONTROLLER;
+            $controller = 'app\controllers\\' . DEFAULT_CONTROLLER;
         }
         array_shift($url);
 
@@ -65,7 +68,5 @@ class Router
 
             header("Location: " . PROOT . $url);
         }
-
     }
-
 }

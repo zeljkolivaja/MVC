@@ -1,5 +1,10 @@
 <?php
 
+namespace App\Controllers;
+
+use App\Models\User;
+use Core\Controller;
+
 class AccountValidationController extends Controller
 {
     public function __construct()
