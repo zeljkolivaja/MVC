@@ -22,8 +22,8 @@
                 <td> <?php e($user->email) ?> </td>
                 <td><?php e("$user->street, $user->city") ?> </td>
                 <td><?php e($user->imageName) ?> </td>
-                <td><a target="_blank" href="<?= $user->path ?>">
-                        <img style="width: 50px; height: 50x" src="<?= $user->path ?>" alt=""></a></td>
+                <td><a target="_blank" href="<?php e('public/images/' . $user->path) ?>">
+                        <img style="width: 50px; height: 50x" src="<?php e('public/images/' . $user->path) ?>" alt=""></a></td>
                 <td>
                     <?php if ($_SESSION["userid"] == $user->imageUserId) : ?>
                         <form action="image/delete" method="POST">

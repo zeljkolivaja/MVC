@@ -69,14 +69,8 @@ class Image extends Model
         //store images to hard drive
         move_uploaded_file($fileTmpName, $fileDestination);
 
-
-        if (ENV === "localhost") {
-            $webPath = PROOT . 'images/' . $fileNameNew;
-        } else {
-            $webPath = "images/" . $fileNameNew;
-        }
         //insert image into database
-        $this->insert($webPath, $imageName, $fileDestination);
+        $this->insert($fileNameNew, $imageName, $fileDestination);
     }
 
     public function deleteImage()
