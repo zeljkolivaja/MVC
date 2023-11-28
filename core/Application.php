@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Core;
 
 class Application
@@ -13,7 +15,7 @@ class Application
 
 
     //class where we set error reporting (dependant on DEBUG constant in config setting)
-    private function _set_reporting()
+    private function _set_reporting(): void
     {
         if (DEBUG) {
             error_reporting(E_ALL);

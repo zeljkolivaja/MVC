@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controllers;
 
 use Core\Controller;
@@ -17,12 +19,12 @@ class HomeController extends Controller
         $this->image = new Image;
     }
 
-    public function index()
+    public function index(): void
     {
         $this->view->render('home/index');
     }
 
-    public function getTotalImages()
+    public function getTotalImages(): void
     {
         $totalImages = $this->image->getTotalImages();
         echo json_encode($totalImages);

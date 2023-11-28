@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controllers;
 
 use Core\Controller;
@@ -19,13 +21,13 @@ class ImageController extends Controller
         $this->image = new Image;
     }
 
-    public function index($message = null)
+    public function index(?string $message = null): void
     {
         $images = $this->image->read();
         $this->view->render('image/index', ["images" => $images, "message" => $message]);
     }
 
-    public function insert()
+    public function insert(): void
     {
         $this->checkCSRF();
 
@@ -42,14 +44,14 @@ class ImageController extends Controller
         \Core\ROUTER::redirect("image");
     }
 
-    public function delete()
+    public function delete(): void
     {
         $this->checkCSRF();
         $this->image->deleteImage();
         \Core\ROUTER::redirect("image");
     }
 
-    private function checkCSRF()
+    private function checkCSRF(): void
     {
         if (
             $_POST["csrf"] == null or

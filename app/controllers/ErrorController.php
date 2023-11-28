@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace app\controllers;
 
 use Core\Controller;
@@ -11,27 +13,27 @@ class ErrorController extends Controller
         parent::__construct();
     }
 
-    public function pageNotFound($message)
+    public function pageNotFound(string $message): void
     {
         self::logError("404 - Page Not Found: $message");
         $this->renderError('error/pageNotFound', 404, ["message" => $message]);
         exit();
     }
 
-    public function forbidden()
+    public function forbidden(): void
     {
         self::logError("403 - Forbidden");
         $this->renderError('error/forbidden', 403);
         exit();
     }
 
-    private function renderError($view, $statusCode, $data = [])
+    private function renderError(string $view, int $statusCode, array $data = []): void
     {
         http_response_code($statusCode);
         $this->view->render($view, $data);
     }
 
-    public static function logError($message)
+    public static function logError(string $message): void
     {
         $logFile = ROOT . DS . 'var' . DS . 'errors' . DS  . 'error.log';
         $data = date('Y-m-d H:i:s') . ' - ' . $message;

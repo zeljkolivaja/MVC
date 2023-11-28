@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controllers;
 
 class RegisterController extends AccountController
@@ -10,7 +12,7 @@ class RegisterController extends AccountController
         parent::__construct();
     }
 
-    public function register()
+    public function register(): void
     {
         $validation = $this->validateUser->validateRegistration();
         $userData = $this->validateUser->formatData();

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controllers;
 
 use App\Models\Image;
@@ -14,7 +16,7 @@ class DeleteAccController extends AccountController
         $this->logout = new LogoutController;
     }
 
-    public function delete()
+    public function delete(): void
     {
         $this->session->checkCsrfandLogin();
         $id = $_POST["id"];

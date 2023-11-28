@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controllers;
 
 use App\Models\Token;
@@ -12,7 +14,7 @@ class LoginController extends AccountController
         parent::__construct();
     }
 
-    public function login()
+    public function login(): void
     {
         $this->session->checkCsrf($_POST["csrf"]);
         $email = filter_var($_POST["email"], FILTER_SANITIZE_EMAIL);

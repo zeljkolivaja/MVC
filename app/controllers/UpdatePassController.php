@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controllers;
 
 class UpdatePassController extends AccountController
@@ -13,7 +15,7 @@ class UpdatePassController extends AccountController
         $this->logout = new LogoutController;
     }
 
-    public function updatePassword()
+    public function updatePassword(): void
     {
 
         $this->session->checkCsrfandLogin();

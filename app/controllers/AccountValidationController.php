@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controllers;
 
 use App\Models\User;
@@ -12,7 +14,7 @@ class AccountValidationController extends Controller
         parent::__construct();
     }
 
-    public function validateLogin()
+    public function validateLogin(): string|bool
     {
         if ($_POST['email'] == null) {
             $message = "You must enter email";
@@ -32,7 +34,7 @@ class AccountValidationController extends Controller
         return true;
     }
 
-    public function validateRegistration()
+    public function validateRegistration(): string|bool
     {
 
         if ($_POST["username"] == null) {
@@ -78,7 +80,7 @@ class AccountValidationController extends Controller
         return true;
     }
 
-    public function validateUpdatePassword($passwordOld, $realPassword)
+    public function validateUpdatePassword(string $passwordOld, string $realPassword): bool
     {
 
         if (password_verify($passwordOld, $realPassword)) {
@@ -88,7 +90,7 @@ class AccountValidationController extends Controller
         }
     }
 
-    public function formatData()
+    public function formatData(): array
     {
         return [
             "username" => trim(preg_replace('/\s+/', ' ', $_POST["username"])),

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controllers;
 
 use Core\Controller;
@@ -13,27 +15,27 @@ class SessionController extends Controller
     {
     }
 
-    public static function getInstance()
+    public static function getInstance(): static
     {
         if (!isset(self::$_instance)) {
-            self::$_instance = new SessionController();
+            self::$_instance = new static();
         }
         return self::$_instance;
     }
 
-    public static function generateCSRF()
+    public static function generateCSRF(): void
     {
         $_SESSION['csrf'] = base64_encode(openssl_random_pseudo_bytes(32));
     }
 
-    public function setSession($id, $username, $email)
+    public function setSession(int $id, string $username, string $email): void
     {
         $_SESSION["username"] = $username;
         $_SESSION['userid'] = $id;
         $_SESSION['email'] = $email;
     }
 
-    public function checkCsrf($csrf)
+    public function checkCsrf(string $csrf): bool
     {
         if ($_SESSION["csrf"] != $csrf) {
             return false;
@@ -41,12 +43,12 @@ class SessionController extends Controller
         return true;
     }
 
-    public function destroySession()
+    public function destroySession(): void
     {
         session_destroy();
     }
 
-    public static function loggedIn()
+    public static function loggedIn(): bool
     {
         if (!empty($_SESSION['userid'])) {
             return true;
@@ -54,7 +56,7 @@ class SessionController extends Controller
         return false;
     }
 
-    public static function forbidIFLoggedOut()
+    public static function forbidIFLoggedOut(): void
     {
         if (!self::loggedIn()) {
             $error = new ErrorController;
@@ -62,14 +64,14 @@ class SessionController extends Controller
         }
     }
 
-    public static function forbidIFLoggedIn()
+    public static function forbidIFLoggedIn(): void
     {
         if (SessionController::loggedIn()) {
             \Core\ROUTER::redirect("home/index");
         }
     }
 
-    public function checkCsrfandLogin()
+    public function checkCsrfandLogin(): void
     {
         if (
             self::loggedIn() == false or

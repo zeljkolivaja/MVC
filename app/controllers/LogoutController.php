@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controllers;
 
 
@@ -11,7 +13,7 @@ class LogoutController extends AccountController
         parent::__construct();
     }
 
-    public function logout()
+    public function logout(): void
     {
         SessionController::forbidIFLoggedOut();
         $this->session->destroySession();

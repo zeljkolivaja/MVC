@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controllers;
 
 use Core\Controller;
@@ -19,26 +21,26 @@ class AccountController extends Controller
         $this->session = SessionController::getInstance();
     }
 
-    public function indexLogin($message = null, $email = null)
+    public function indexLogin(?string $message = null, ?string $email = null): void
     {
         SessionController::forbidIFLoggedIn();
         SessionController::generateCSRF();
         $this->view->render('account/signin', ["message" => $message, "email" => $email]);
     }
 
-    public function indexRegister($message = null, $userData = [])
+    public function indexRegister(?string $message = null, array $userData = []): void
     {
         SessionController::forbidIFLoggedIn();
         $this->view->render('account/signup', ["message" => $message, "userData" => $userData]);
     }
 
-    public function indexChangePassword($message = null)
+    public function indexChangePassword(?string $message = null): void
     {
         SessionController::forbidIFLoggedOut();
         $this->view->render('account/changePassword', ["message" => $message]);
     }
 
-    public function menage()
+    public function menage(): void
     {
         SessionController::forbidIFLoggedOut();
         $this->view->render('account/menage');
