@@ -30,10 +30,13 @@ class Token extends Model
         setcookie(
             'remember',
             $selector . ':' . base64_encode($authenticator),
-            time() + 864000,
-            '/'
-            // false,
-            // true // TLS-only
+            [
+                'expires' => time() + 864000,
+                'path' => '/',
+                //'secure' => true, enable this with https
+                'httponly' => true, //prevents JS from accessing cookie
+                'samesite' => 'Lax', //prevent cookie being sent to other websites
+            ]
         );
     }
 
